@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourtSide | Reviews & Feedback</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+
+    <header>
+      <h1>CourtSide</h1>
+      <nav>
+        <a href="index.html">Book a Lesson</a>
+        <a href="reviews.html">Reviews & Feedback</a>
+        <a href="snacks.html">Snack Shop</a>
+        <a href="proshop.html">Pro Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="services.html">Services</a>
+      </nav>
+    </header>
+
+        <div class="hero-band"></div>
+
+    <main>
+      <section class="reviews">
+        <h2>Customer Reviews</h2>
+
+        <article class="review">
+          <p class="reviewer">Sarah T.</p>
+          <p class="rating">Rating: 5/5</p>
+          <p>My coach completely rebuilt my serve in three sessions. Best money I've spent on my game this year.</p>
+        </article>
+
+        <article class="review">
+          <p class="reviewer">Mike D.</p>
+          <p class="rating">Rating: 4/5</p>
+          <p>Great instruction and very patient with beginners. Scheduling was easy too.</p>
+        </article>
+
+        <div id="reviewList"></div>
+      </section>
+
+      <section class="feedback-form">
+        <h2>Leave Your Feedback</h2>
+        <form id="feedbackForm">
+          <label for="nameInput">Name:</label>
+          <input type="text" id="nameInput" required>
+
+          <label for="ratingInput">Rating (1-5):</label>
+          <input type="number" id="ratingInput" min="1" max="5" required>
+
+          <label for="commentInput">Comment:</label>
+          <textarea id="commentInput" required></textarea>
+
+          <button type="submit">Submit Feedback</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 CourtSide. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+  </body>
+</html>

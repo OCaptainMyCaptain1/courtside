@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourtSide | Pro Shop</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+
+    <header>
+      <h1>CourtSide</h1>
+      <nav>
+        <a href="index.html">Book a Lesson</a>
+        <a href="reviews.html">Reviews & Feedback</a>
+        <a href="snacks.html">Snack Shop</a>
+        <a href="proshop.html">Pro Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="services.html">Services</a>
+      </nav>
+    </header>
+
+        <div class="hero-band"></div>
+
+    <main>
+      <section class="shop">
+        <h2>Pro Shop</h2>
+
+        <div class="product-grid">
+
+          <div class="product-card">
+            <h3>Performance Racquet</h3>
+            <p>A balanced racquet suited for players of all levels.</p>
+            <p class="product-price">$129.99</p>
+            <label for="gripSelect1">Grip Size:</label>
+            <select id="gripSelect1" class="variantSelect">
+              <option value="Grip 4">Grip 4</option>
+              <option value="Grip 4 1/4">Grip 4 1/4</option>
+              <option value="Grip 4 1/2">Grip 4 1/2</option>
+              <option value="Grip 4 5/8">Grip 4 5/8</option>
+            </select>
+            <button class="addBtn" data-name="Performance Racquet" data-price="129.99">Add to Cart</button>
+          </div>
+
+          <div class="product-card">
+            <h3>Replacement Grip Tape</h3>
+            <p>Fresh grip tape to keep your racquet feeling new.</p>
+            <p class="product-price">$8.00</p>
+            <button class="addBtn" data-name="Replacement Grip Tape" data-price="8.00">Add to Cart</button>
+          </div>
+
+          <div class="product-card">
+            <h3>Tennis Bag</h3>
+            <p>Spacious bag with room for racquets, shoes, and gear.</p>
+            <p class="product-price">$45.00</p>
+            <button class="addBtn" data-name="Tennis Bag" data-price="45.00">Add to Cart</button>
+          </div>
+
+          <div class="product-card">
+            <h3>Wristbands (2-Pack)</h3>
+            <p>Sweat-wicking wristbands for long matches.</p>
+            <p class="product-price">$6.50</p>
+            <button class="addBtn" data-name="Wristbands (2-Pack)" data-price="6.50">Add to Cart</button>
+          </div>
+
+        </div>
+
+        <p id="addMessage"></p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 CourtSide. All rights reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script src="shop.js"></script>
+  </body>
+</html>

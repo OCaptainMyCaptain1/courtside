@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourtSide | Snack Shop</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+
+    <header>
+      <h1>CourtSide</h1>
+      <nav>
+        <a href="index.html">Book a Lesson</a>
+        <a href="reviews.html">Reviews & Feedback</a>
+        <a href="snacks.html">Snack Shop</a>
+        <a href="proshop.html">Pro Shop</a>
+        <a href="cart.html">Cart</a>
+        <a href="services.html">Services</a>
+      </nav>
+    </header>
+
+        <div class="hero-band"></div>
+
+    <main>
+      <section class="shop">
+        <h2>Snack Shop</h2>
+
+        <p class="court-delivery-note">
+          If you're already on court, just enter your court number below and we'll run your order out to you!
+        </p>
+
+        <div class="court-delivery">
+          <label>
+            <input type="checkbox" id="onCourtCheckbox">
+            I'm currently on court
+          </label>
+          <div id="courtNumberWrapper" class="hidden">
+            <label for="courtNumberInput">Court Number:</label>
+            <input type="text" id="courtNumberInput" placeholder="e.g. 4">
+          </div>
+        </div>
+
+        <div class="product-grid">
+
+          <div class="product-card">
+            <h3>Trail Mix</h3>
+            <p>A classic mix of nuts, dried fruit, and a little chocolate.</p>
+            <p class="product-price">$3.50</p>
+            <button class="addBtn" data-name="Trail Mix" data-price="3.50">Add to Cart</button>
+          </div>
+
+          <div class="product-card">
+            <h3>Sports Drink</h3>
+            <p>Electrolyte replacement to keep you going between sets.</p>
+            <p class="product-price">$2.75</p>
+            <button class="addBtn" data-name="Sports Drink" data-price="2.75">Add to Cart</button>
+          </div>
+
+          <div class="product-card">
+            <h3>Protein Bar</h3>
+            <p>A quick, filling bite before or after your session.</p>
+            <p class="product-price">$2.25</p>
+            <button class="addBtn" data-name="Protein Bar" data-price="2.25">Add to Cart</button>
+          </div>
+
+          <div class="product-card">
+            <h3>Bottled Water</h3>
+            <p>Stay hydrated out there.</p>
+            <p class="product-price">$1.50</p>
+            <button class="addBtn" data-name="Bottled Water" data-price="1.50">Add to Cart</button>
+          </div>
+
+        </div>
+
+        <p id="addMessage"></p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 CourtSide. All rights reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script src="shop.js"></script>
+  </body>
+</html>
