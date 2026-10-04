@@ -3,25 +3,26 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CourtSide | Reviews & Feedback</title>
+    <title>CourtSide | Reviews &amp; Feedback</title>
     <link rel="stylesheet" href="styles.css">
   </head>
 
   <body>
 
     <header>
-      <h1>CourtSide</h1>
+      <h1><a href="index.html">CourtSide</a></h1>
       <nav>
-        <a href="index.html">Book a Lesson</a>
-        <a href="reviews.html">Reviews & Feedback</a>
+        <a href="index.html">Home</a>
+        <a href="lessons.html">Book a Lesson</a>
+        <a href="reviews.html">Reviews &amp; Feedback</a>
         <a href="snacks.html">Snack Shop</a>
         <a href="proshop.html">Pro Shop</a>
-        <a href="cart.html">Cart</a>
         <a href="services.html">Services</a>
+        <a href="#" id="cartLink">Cart (<span class="cart-count">0</span>)</a>
       </nav>
     </header>
 
-        <div class="hero-band"></div>
+    <div class="hero-band"></div>
 
     <main>
       <section class="reviews">
@@ -46,15 +47,17 @@
         <h2>Leave Your Feedback</h2>
         <form id="feedbackForm">
           <label for="nameInput">Name:</label>
-          <input type="text" id="nameInput" required>
+          <input type="text" id="nameInput" placeholder="John Doe" required>
 
           <label for="ratingInput">Rating (1-5):</label>
-          <input type="number" id="ratingInput" min="1" max="5" required>
+          <input type="number" id="ratingInput" min="1" max="5" placeholder="5" required>
 
           <label for="commentInput">Comment:</label>
-          <textarea id="commentInput" required></textarea>
+          <textarea id="commentInput" maxlength="300" placeholder="Tell us about your lesson, coach, or purchase" required></textarea>
+          <p id="charCount" class="char-count">0 / 300</p>
 
           <button type="submit">Submit Feedback</button>
+          <p id="feedbackMessage"></p>
         </form>
       </section>
     </main>
@@ -63,7 +66,7 @@
       <p>&copy; 2026 CourtSide. All rights reserved.</p>
     </footer>
 
+    <script src="cart.js"></script>
     <script src="script.js"></script>
-
   </body>
 </html>

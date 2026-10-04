@@ -10,22 +10,27 @@
   <body>
 
     <header>
-      <h1>CourtSide</h1>
+      <h1><a href="index.html">CourtSide</a></h1>
       <nav>
-        <a href="index.html">Book a Lesson</a>
-        <a href="reviews.html">Reviews & Feedback</a>
+        <a href="index.html">Home</a>
+        <a href="lessons.html">Book a Lesson</a>
+        <a href="reviews.html">Reviews &amp; Feedback</a>
         <a href="snacks.html">Snack Shop</a>
         <a href="proshop.html">Pro Shop</a>
-        <a href="cart.html">Cart</a>
         <a href="services.html">Services</a>
+        <a href="#" id="cartLink">Cart (<span class="cart-count">0</span>)</a>
       </nav>
     </header>
 
-        <div class="hero-band"></div>
+    <div class="hero-band"></div>
 
-    <main>
+    <main class="wide">
       <section class="shop">
         <h2>Pro Shop</h2>
+
+        <p class="shop-note">
+          Pro Shop orders are picked up at the CourtSide front desk. We don't ship, so there are no delivery fees or wait times.
+        </p>
 
         <div class="product-grid">
 
@@ -62,6 +67,13 @@
             <p>Sweat-wicking wristbands for long matches.</p>
             <p class="product-price">$6.50</p>
             <button class="addBtn" data-name="Wristbands (2-Pack)" data-price="6.50">Add to Cart</button>
+          </div>
+
+          <div class="product-card">
+            <h3>Grommet/Headguard Set</h3>
+            <p>Replacement grommets and headguard to protect your frame and strings.</p>
+            <p class="product-price">$12.00</p>
+            <button class="addBtn" data-name="Grommet/Headguard Set" data-price="12.00">Add to Cart</button>
           </div>
 
         </div>

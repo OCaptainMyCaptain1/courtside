@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourtSide | Checkout</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+
+    <header>
+      <h1><a href="index.html">CourtSide</a></h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="lessons.html">Book a Lesson</a>
+        <a href="reviews.html">Reviews &amp; Feedback</a>
+        <a href="snacks.html">Snack Shop</a>
+        <a href="proshop.html">Pro Shop</a>
+        <a href="services.html">Services</a>
+        <a href="#" id="cartLink">Cart (<span class="cart-count">0</span>)</a>
+      </nav>
+    </header>
+
+    <div class="hero-band"></div>
+
+    <main class="wide">
+      <h2>Checkout</h2>
+
+      <p class="prototype-banner">
+        This is a class prototype, not a real store. Do not enter a real credit card number.
+        Nothing you type here is saved or sent anywhere, and no payment is taken.
+        Use the "Fill in test card" button in the payment section.
+      </p>
+
+      <div id="emptyCheckout" class="hidden">
+        <p>Your cart is empty. Visit the <a href="snacks.html">Snack Shop</a>, <a href="proshop.html">Pro Shop</a>, or <a href="services.html">Services</a> to add something.</p>
+      </div>
+
+      <div id="checkoutLayout" class="checkout-layout">
+
+        <form id="checkoutForm" novalidate>
+
+          <section class="form-section">
+            <h3>Your details</h3>
+            <p>No account needed.</p>
+            <label for="checkoutName">Full name</label>
+            <input type="text" id="checkoutName" placeholder="John Doe" autocomplete="name">
+            <p class="error-text" id="checkoutNameError"></p>
+
+            <label for="checkoutEmail">Email</label>
+            <input type="email" id="checkoutEmail" placeholder="johndoe@example.com" autocomplete="email">
+            <p class="error-text" id="checkoutEmailError"></p>
+          </section>
+
+          <section class="form-section">
+            <h3>Pickup or court delivery</h3>
+            <label class="radio-option" for="fulfillPickup">
+              <input type="radio" name="fulfillment" id="fulfillPickup" checked>
+              <span>Pick up at the CourtSide front desk</span>
+            </label>
+            <label class="radio-option" for="fulfillCourt">
+              <input type="radio" name="fulfillment" id="fulfillCourt">
+              <span>Bring it to my court</span>
+            </label>
+
+            <div id="courtNumberWrapper" class="hidden">
+              <label for="courtNumber">Court number</label>
+              <input type="text" id="courtNumber" placeholder="e.g. 4">
+              <p class="error-text" id="courtNumberError"></p>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h3>Payment</h3>
+            <p>Test mode only. No real card, no real charge.</p>
+
+            <label for="cardNumber">Card number</label>
+            <input type="text" id="cardNumber" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000">
+            <p class="error-text" id="cardNumberError"></p>
+
+            <div class="card-row">
+              <div>
+                <label for="cardExpiry">Expiry (MM/YY)</label>
+                <input type="text" id="cardExpiry" inputmode="numeric" autocomplete="off" placeholder="MM/YY">
+                <p class="error-text" id="cardExpiryError"></p>
+              </div>
+              <div>
+                <label for="cardCvc">Security code</label>
+                <input type="text" id="cardCvc" inputmode="numeric" autocomplete="off" placeholder="123">
+                <p class="error-text" id="cardCvcError"></p>
+              </div>
+            </div>
+
+            <button type="button" id="fillTestCardBtn" class="test-card-btn">Fill in test card</button>
+
+            <div class="trust-badge-placeholder">[ Trust badge placeholder: a real security or payment-provider badge would go here ]</div>
+          </section>
+
+          <button type="submit" id="placeOrderBtn">Place order (prototype)</button>
+        </form>
+
+        <aside class="order-summary">
+          <h3>Order summary</h3>
+          <div id="summaryItems"></div>
+          <p id="summaryTotal" class="cart-total"></p>
+        </aside>
+
+      </div>
+
+      <section id="confirmation" class="confirmation hidden">
+        <h2 id="confirmTitle"></h2>
+        <p>Order number: <strong id="confirmNumber"></strong></p>
+        <p id="confirmFulfillment"></p>
+        <p>Total: <strong id="confirmTotal"></strong></p>
+        <p>This was a prototype order. Nothing was charged and nothing you entered was saved.</p>
+        <p><a href="index.html">Back to the homepage</a></p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 CourtSide. All rights reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script src="checkout.js"></script>
+  </body>
+</html>

@@ -10,37 +10,28 @@
   <body>
 
     <header>
-      <h1>CourtSide</h1>
+      <h1><a href="index.html">CourtSide</a></h1>
       <nav>
-        <a href="index.html">Book a Lesson</a>
-        <a href="reviews.html">Reviews & Feedback</a>
+        <a href="index.html">Home</a>
+        <a href="lessons.html">Book a Lesson</a>
+        <a href="reviews.html">Reviews &amp; Feedback</a>
         <a href="snacks.html">Snack Shop</a>
         <a href="proshop.html">Pro Shop</a>
-        <a href="cart.html">Cart</a>
         <a href="services.html">Services</a>
+        <a href="#" id="cartLink">Cart (<span class="cart-count">0</span>)</a>
       </nav>
     </header>
 
-        <div class="hero-band"></div>
+    <div class="hero-band"></div>
 
-    <main>
+    <main class="wide">
       <section class="shop">
         <h2>Snack Shop</h2>
 
-        <p class="court-delivery-note">
-          If you're already on court, just enter your court number below and we'll run your order out to you!
+        <p class="shop-note">
+          <strong>Already on court?</strong> Choose "Bring it to my court" at checkout and enter your court number,
+          and we'll run your order out to you. Otherwise, pick it up at the CourtSide front desk.
         </p>
-
-        <div class="court-delivery">
-          <label>
-            <input type="checkbox" id="onCourtCheckbox">
-            I'm currently on court
-          </label>
-          <div id="courtNumberWrapper" class="hidden">
-            <label for="courtNumberInput">Court Number:</label>
-            <input type="text" id="courtNumberInput" placeholder="e.g. 4">
-          </div>
-        </div>
 
         <div class="product-grid">
 

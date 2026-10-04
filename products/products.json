@@ -1,0 +1,161 @@
+[
+  {
+    "name": "Trail Mix",
+    "description": "A classic mix of nuts, dried fruit, and a little chocolate.",
+    "category": "snack",
+    "price": 3.5,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Sports Drink",
+    "description": "Electrolyte replacement to keep you going between sets.",
+    "category": "snack",
+    "price": 2.75,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Protein Bar",
+    "description": "A quick, filling bite before or after your session.",
+    "category": "snack",
+    "price": 2.25,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Bottled Water",
+    "description": "Stay hydrated out there.",
+    "category": "snack",
+    "price": 1.5,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Performance Racquet",
+    "description": "A balanced racquet suited for players of all levels.",
+    "category": "proshop",
+    "price": 129.99,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": "Grip Size",
+    "optionValues": [
+      "Grip 4",
+      "Grip 4 1/4",
+      "Grip 4 1/2",
+      "Grip 4 5/8"
+    ],
+    "inStock": true
+  },
+  {
+    "name": "Replacement Grip Tape",
+    "description": "Fresh grip tape to keep your racquet feeling new.",
+    "category": "proshop",
+    "price": 8,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Tennis Bag",
+    "description": "Spacious bag with room for racquets, shoes, and gear.",
+    "category": "proshop",
+    "price": 45,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Wristbands (2-Pack)",
+    "description": "Sweat-wicking wristbands for long matches.",
+    "category": "proshop",
+    "price": 6.5,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Grommet/Headguard Set",
+    "description": "Replacement grommets and headguard to protect your frame and strings.",
+    "category": "proshop",
+    "price": 12,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Racquet Stringing",
+    "description": "Professional stringing, ready within 24 hours.",
+    "category": "service",
+    "price": 25,
+    "priceUnit": null,
+    "priceNote": "Customer types their own tension (40 to 70 lbs).",
+    "optionLabel": "String Type",
+    "optionValues": [
+      "Synthetic Gut",
+      "Multifilament",
+      "Polyester"
+    ],
+    "inStock": true
+  },
+  {
+    "name": "Grip Installation",
+    "description": "Fresh grip installed by our staff while you wait.",
+    "category": "service",
+    "price": 6,
+    "priceUnit": null,
+    "priceNote": "Price shown is for an overgrip. Replacement grip installation is $10.00.",
+    "optionLabel": "Grip Type",
+    "optionValues": [
+      "Overgrip",
+      "Replacement Grip"
+    ],
+    "inStock": true
+  },
+  {
+    "name": "Grommet/Headguard Set Installation",
+    "description": "Our staff will install your grommet/headguard set.",
+    "category": "service",
+    "price": 15,
+    "priceUnit": null,
+    "priceNote": null,
+    "optionLabel": null,
+    "optionValues": null,
+    "inStock": true
+  },
+  {
+    "name": "Demo Racquet Rental",
+    "description": "Try before you buy with one of our demo racquets.",
+    "category": "service",
+    "price": 15,
+    "priceUnit": "per day",
+    "priceNote": null,
+    "optionLabel": "Rental Length",
+    "optionValues": [
+      "1 Day",
+      "3 Days",
+      "1 Week"
+    ],
+    "inStock": true
+  }
+]

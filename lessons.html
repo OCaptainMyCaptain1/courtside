@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourtSide | Book a Lesson</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+
+    <header>
+      <h1><a href="index.html">CourtSide</a></h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="lessons.html">Book a Lesson</a>
+        <a href="reviews.html">Reviews &amp; Feedback</a>
+        <a href="snacks.html">Snack Shop</a>
+        <a href="proshop.html">Pro Shop</a>
+        <a href="services.html">Services</a>
+        <a href="#" id="cartLink">Cart (<span class="cart-count">0</span>)</a>
+      </nav>
+    </header>
+
+    <div class="hero-band"></div>
+
+    <main>
+      <section class="lesson-offer">
+        <h2>Private 1-on-1 Tennis Lesson</h2>
+        <img src="images/lesson.jpg" alt="Tennis coach demonstrating a forehand swing to a student">
+        <p class="photo-credit">
+        Photo by <a href="https://unsplash.com/@sagredophotography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener">Richard Sagredo</a> on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>
+        </p>
+        <p>
+          Work one-on-one with a certified instructor to sharpen your serve,
+          footwork, and match strategy. Sessions are tailored to your skill
+          level, whether you're picking up a racquet for the first time or
+          training for competitive play.
+        </p>
+        <p class="price">$45 per 60-minute session</p>
+
+        <label for="coachSelect">Choose Your Coach:</label>
+        <select id="coachSelect">
+          <option value="Roger Federer">Roger Federer</option>
+          <option value="Marat Safin">Marat Safin</option>
+          <option value="Serena Williams">Serena Williams</option>
+          <option value="Rafael Nadal">Rafael Nadal</option>
+          <option value="Billie Jean King">Billie Jean King</option>
+        </select>
+
+        <label for="dateInput">Choose a Date:</label>
+        <input type="date" id="dateInput" required>
+
+        <label for="timeSelect">Choose a Time:</label>
+        <select id="timeSelect">
+          <option value="7:00 AM">7:00 AM</option>
+          <option value="8:00 AM">8:00 AM</option>
+          <option value="9:00 AM">9:00 AM</option>
+          <option value="10:00 AM">10:00 AM</option>
+          <option value="11:00 AM">11:00 AM</option>
+          <option value="1:00 PM">1:00 PM</option>
+          <option value="2:00 PM">2:00 PM</option>
+          <option value="3:00 PM">3:00 PM</option>
+          <option value="4:00 PM">4:00 PM</option>
+          <option value="5:00 PM">5:00 PM</option>
+          <option value="6:00 PM">6:00 PM</option>
+          <option value="7:00 PM">7:00 PM</option>
+          <option value="8:00 PM">8:00 PM</option>
+        </select>
+
+        <button id="bookBtn">Book A Lesson</button>
+        <p id="bookingMessage"></p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 CourtSide. All rights reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
