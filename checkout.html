@@ -13,7 +13,7 @@
       <h1><a href="index.html">CourtSide</a></h1>
       <nav>
         <a href="index.html">Home</a>
-        <a href="lessons.html">Book a Lesson</a>
+        <a href="lessons.html" class="nav-cta">Book a Lesson</a>
         <a href="reviews.html">Reviews &amp; Feedback</a>
         <a href="snacks.html">Snack Shop</a>
         <a href="proshop.html">Pro Shop</a>
@@ -34,7 +34,7 @@
       </p>
 
       <div id="emptyCheckout" class="hidden">
-        <p>Your cart is empty. Visit the <a href="snacks.html">Snack Shop</a>, <a href="proshop.html">Pro Shop</a>, or <a href="services.html">Services</a> to add something.</p>
+        <p>Your cart is empty. <a href="lessons.html">Book a lesson</a>, or visit the <a href="snacks.html">Snack Shop</a>, <a href="proshop.html">Pro Shop</a>, or <a href="services.html">Services</a> to add something.</p>
       </div>
 
       <div id="checkoutLayout" class="checkout-layout">
@@ -53,7 +53,7 @@
             <p class="error-text" id="checkoutEmailError"></p>
           </section>
 
-          <section class="form-section">
+          <section class="form-section" id="fulfillmentSection">
             <h3>Pickup or court delivery</h3>
             <label class="radio-option" for="fulfillPickup">
               <input type="radio" name="fulfillment" id="fulfillPickup" checked>
@@ -111,6 +111,10 @@
       <section id="confirmation" class="confirmation hidden">
         <h2 id="confirmTitle"></h2>
         <p>Order number: <strong id="confirmNumber"></strong></p>
+        <div id="confirmLessonsWrapper" class="hidden">
+          <p>Your lessons:</p>
+          <ul id="confirmLessons" class="confirm-list"></ul>
+        </div>
         <p id="confirmFulfillment"></p>
         <p>Total: <strong id="confirmTotal"></strong></p>
         <p>This was a prototype order. Nothing was charged and nothing you entered was saved.</p>

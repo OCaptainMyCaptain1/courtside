@@ -29,6 +29,14 @@ function renderSummary() {
   });
 
   document.getElementById("summaryTotal").textContent = "Total: $" + calculateTotal(cart).toFixed(2);
+
+  // Pickup and court delivery only matter if the order has something to hand over (lessons alone don't)
+  const needsFulfillment = hasPhysicalItems(cart);
+  document.getElementById("fulfillmentSection").classList.toggle("hidden", !needsFulfillment);
+  if (!needsFulfillment) {
+    pickupRadio.checked = true;
+    updateFulfillment();
+  }
 }
 
 document.addEventListener("cartchanged", renderSummary);
@@ -156,15 +164,32 @@ function placeOrder() {
   const firstName = document.getElementById("checkoutName").value.trim().split(" ")[0];
   const court = document.getElementById("courtNumber").value.trim();
 
-  const fulfillmentText = courtRadio.checked
-    ? "We'll bring your order to court " + court + "."
-    : "Pick up your order at the CourtSide front desk.";
+  const lessons = cart.filter(function (item) {
+    return item.type === "lesson";
+  });
+
+  let fulfillmentText = "";
+  if (hasPhysicalItems(cart)) {
+    fulfillmentText = courtRadio.checked
+      ? "We'll bring your order to court " + court + "."
+      : "Pick up your order at the CourtSide front desk.";
+  }
 
   orderPlaced = true;
 
   document.getElementById("confirmTitle").textContent = "Thanks for your order, " + firstName + "!";
   document.getElementById("confirmNumber").textContent = orderNumber;
   document.getElementById("confirmFulfillment").textContent = fulfillmentText;
+  document.getElementById("confirmFulfillment").classList.toggle("hidden", fulfillmentText === "");
+
+  const lessonList = document.getElementById("confirmLessons");
+  lessonList.innerHTML = "";
+  lessons.forEach(function (lesson) {
+    const li = document.createElement("li");
+    li.textContent = lesson.options;
+    lessonList.appendChild(li);
+  });
+  document.getElementById("confirmLessonsWrapper").classList.toggle("hidden", lessons.length === 0);
   document.getElementById("confirmTotal").textContent = "$" + total.toFixed(2);
 
   // Wipe everything: the form (including the card boxes) and the cart

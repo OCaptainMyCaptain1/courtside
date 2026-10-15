@@ -368,3 +368,41 @@ textarea:focus::placeholder { color: transparent; }
 /* Logo links back to the homepage */
 header h1 a { color: #ffffff; }
 header h1 a:hover { text-decoration: none; }
+
+/* ===== Assignment 4 additions: coaching-first homepage and lessons in the cart ===== */
+
+/* Primary "Book a Lesson" link in the nav */
+nav a.nav-cta { background: #7c4dff; padding: 8px 16px; border-radius: 6px; }
+nav a.nav-cta:hover { background: #5e35d1; color: #ffffff; }
+
+/* Homepage hero: coaching message beside the lesson photo */
+.hero-split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; text-align: left; padding: 40px 32px; }
+.hero-split .hero-text p { margin: 0 0 20px; max-width: none; }
+.hero-split .hero-text h2 { font-size: 2.4rem; line-height: 1.15; }
+.hero-split .hero-text .hero-sub { margin: 16px 0 0; font-size: 0.95rem; color: #555; }
+.hero-photo { justify-self: center; width: 100%; max-width: 320px; }
+.hero-photo img { width: 100%; height: auto; max-height: 300px; object-fit: cover; border-radius: 6px; display: block; }
+.hero-photo figcaption { font-size: 0.8rem; color: #666; margin-top: 6px; }
+
+.feature-grid.three { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.home-section { margin-bottom: 40px; }
+.section-cta { margin-top: 24px; }
+
+/* Secondary offerings read as add-ons: quieter and smaller than the lesson content above */
+.addons > h2 { font-size: 1.3rem; }
+.feature-card.compact { padding: 18px; background: #f3f4fb; border: 1px solid #c9cfe8; }
+.feature-card.compact h3 { font-size: 1.05rem; }
+.feature-card.compact p { font-size: 0.95rem; }
+
+/* Lesson page and cart */
+.price-note { color: #555; }
+.booking-note { font-size: 0.9rem; color: #555; margin-top: 12px; margin-bottom: 0; }
+.inline-link-btn { background: none; border: none; color: #7c4dff; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; padding: 0; }
+.lesson-tag { font-size: 0.9rem; color: #555; }
+.confirm-list { margin: 0 0 10px 20px; }
+
+@media (max-width: 800px) {
+  .hero-split { grid-template-columns: 1fr; padding: 28px 20px; }
+  .hero-split .hero-text h2 { font-size: 1.9rem; }
+  nav a.nav-cta { margin-left: 0; }
+}

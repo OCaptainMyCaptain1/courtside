@@ -27,6 +27,29 @@ function addToCart(name, price, options) {
   saveCart(cart);
 }
 
+// Add a private lesson. Lessons are one-per-slot, so they never stack into a quantity.
+// Returns "added", "duplicate" (same coach, date, and time), or "conflict" (a different coach at the same date and time).
+function addLessonToCart(name, price, options, date, time) {
+  const cart = getCart();
+
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].type !== "lesson") continue;
+    if (cart[i].options === options) return "duplicate";
+    if (cart[i].date === date && cart[i].time === time) return "conflict";
+  }
+
+  cart.push({ name: name, price: price, quantity: 1, options: options, type: "lesson", date: date, time: time });
+  saveCart(cart);
+  return "added";
+}
+
+// True if the cart has anything that is not a lesson (snacks, gear, services need pickup or court delivery)
+function hasPhysicalItems(cart) {
+  return cart.some(function (item) {
+    return item.type !== "lesson";
+  });
+}
+
 // Add or subtract from an item's quantity (going below 1 removes it)
 function changeQuantity(index, change) {
   const cart = getCart();
@@ -127,7 +150,7 @@ function refreshCartUI() {
     const footer = document.getElementById("drawerFooter");
 
     if (cart.length === 0) {
-      drawerItems.innerHTML = `<p class="drawer-empty">Your cart is empty. Add something from the shops to get started.</p>`;
+      drawerItems.innerHTML = `<p class="drawer-empty">Your cart is empty. Book a lesson or add something from the shops to get started.</p>`;
       footer.classList.add("hidden");
     } else {
       footer.classList.remove("hidden");
@@ -137,16 +160,21 @@ function refreshCartUI() {
         const subtotal = item.price * item.quantity;
         const optionsLine = item.options ? `<p class="drawer-item-options">${item.options}</p>` : "";
 
+        // A lesson is a single reserved slot, so it gets a label instead of + and - buttons
+        const quantityControls = item.type === "lesson"
+          ? `<span class="lesson-tag">1 lesson</span>`
+          : `<div class="qty-controls">
+                <button class="qty-btn" data-action="decrease" data-index="${index}" aria-label="Decrease quantity">&minus;</button>
+                <span>${item.quantity}</span>
+                <button class="qty-btn" data-action="increase" data-index="${index}" aria-label="Increase quantity">+</button>
+              </div>`;
+
         drawerItems.innerHTML += `
           <div class="drawer-item">
             <p class="drawer-item-name">${item.name} &ndash; $${item.price.toFixed(2)}</p>
             ${optionsLine}
             <div class="drawer-item-row">
-              <div class="qty-controls">
-                <button class="qty-btn" data-action="decrease" data-index="${index}" aria-label="Decrease quantity">&minus;</button>
-                <span>${item.quantity}</span>
-                <button class="qty-btn" data-action="increase" data-index="${index}" aria-label="Increase quantity">+</button>
-              </div>
+              ${quantityControls}
               <strong>$${subtotal.toFixed(2)}</strong>
               <button class="removeBtn" data-action="remove" data-index="${index}">Remove</button>
             </div>
