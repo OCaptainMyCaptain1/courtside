@@ -8,13 +8,14 @@
   </head>
 
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
 
     <header>
       <h1><a href="index.html">CourtSide</a></h1>
-      <nav>
+      <nav aria-label="Main">
         <a href="index.html">Home</a>
         <a href="lessons.html" class="nav-cta">Book a Lesson</a>
-        <a href="reviews.html">Reviews &amp; Feedback</a>
+        <a href="reviews.html">Reviews</a>
         <a href="snacks.html">Snack Shop</a>
         <a href="proshop.html">Pro Shop</a>
         <a href="services.html">Services</a>
@@ -24,7 +25,7 @@
 
     <div class="hero-band"></div>
 
-    <main>
+    <main id="main" tabindex="-1">
       <section class="lesson-offer">
         <h2>Private 1-on-1 Tennis Lesson</h2>
         <img src="images/lesson.jpg" alt="Tennis coach demonstrating a forehand swing to a student">
@@ -40,38 +41,96 @@
         <p class="price">$45 per 60-minute session</p>
         <p class="price-note">Certified coaches, sessions built around your game, and no long-term commitment.</p>
 
-        <label for="coachSelect">Choose Your Coach:</label>
-        <select id="coachSelect">
-          <option value="Coach 1">Coach 1</option>
-          <option value="Coach 2">Coach 2</option>
-          <option value="Coach 3">Coach 3</option>
-          <option value="Coach 4">Coach 4</option>
-          <option value="Coach 5">Coach 5</option>
-        </select>
+        <fieldset class="choice-group" id="coachGroup" aria-describedby="coachError">
+          <legend>Choose Your Coach:</legend>
+          <div class="coach-grid">
+            <label class="coach-card">
+              <input type="radio" name="coach" value="Coach 1">
+              <span class="coach-card-body">
+                <span class="coach-avatar" aria-hidden="true">C1</span>
+                <span class="coach-name">Coach 1</span>
+                <span class="coach-focus">Serve and footwork</span>
+              </span>
+            </label>
+            <label class="coach-card">
+              <input type="radio" name="coach" value="Coach 2">
+              <span class="coach-card-body">
+                <span class="coach-avatar" aria-hidden="true">C2</span>
+                <span class="coach-name">Coach 2</span>
+                <span class="coach-focus">Beginners and juniors</span>
+              </span>
+            </label>
+            <label class="coach-card">
+              <input type="radio" name="coach" value="Coach 3">
+              <span class="coach-card-body">
+                <span class="coach-avatar" aria-hidden="true">C3</span>
+                <span class="coach-name">Coach 3</span>
+                <span class="coach-focus">Match strategy</span>
+              </span>
+            </label>
+            <label class="coach-card">
+              <input type="radio" name="coach" value="Coach 4">
+              <span class="coach-card-body">
+                <span class="coach-avatar" aria-hidden="true">C4</span>
+                <span class="coach-name">Coach 4</span>
+                <span class="coach-focus">Competitive training</span>
+              </span>
+            </label>
+            <label class="coach-card">
+              <input type="radio" name="coach" value="Coach 5">
+              <span class="coach-card-body">
+                <span class="coach-avatar" aria-hidden="true">C5</span>
+                <span class="coach-name">Coach 5</span>
+                <span class="coach-focus">Backhand and consistency</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+        <p class="error-text" id="coachError"></p>
 
         <label for="dateInput">Choose a Date:</label>
-        <input type="date" id="dateInput" required>
+        <input type="date" id="dateInput" required aria-describedby="dateHint dateError">
+        <p id="dateHint" class="field-hint"></p>
+        <p class="error-text" id="dateError"></p>
 
-        <label for="timeSelect">Choose a Time:</label>
-        <select id="timeSelect">
-          <option value="7:00 AM">7:00 AM</option>
-          <option value="8:00 AM">8:00 AM</option>
-          <option value="9:00 AM">9:00 AM</option>
-          <option value="10:00 AM">10:00 AM</option>
-          <option value="11:00 AM">11:00 AM</option>
-          <option value="1:00 PM">1:00 PM</option>
-          <option value="2:00 PM">2:00 PM</option>
-          <option value="3:00 PM">3:00 PM</option>
-          <option value="4:00 PM">4:00 PM</option>
-          <option value="5:00 PM">5:00 PM</option>
-          <option value="6:00 PM">6:00 PM</option>
-          <option value="7:00 PM">7:00 PM</option>
-          <option value="8:00 PM">8:00 PM</option>
-        </select>
+        <fieldset class="choice-group" id="timeGroup" aria-describedby="timeHint timeError">
+          <legend>Choose a Time:</legend>
+          <p class="field-hint" id="timeHint"></p>
+          <div class="time-group" role="group" aria-label="Morning">
+            <p class="time-group-label" aria-hidden="true">Morning</p>
+            <div class="choice-options">
+              <label class="choice-option"><input type="radio" name="lessonTime" value="7:00 AM"><span>7:00 AM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="8:00 AM"><span>8:00 AM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="9:00 AM"><span>9:00 AM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="10:00 AM"><span>10:00 AM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="11:00 AM"><span>11:00 AM</span></label>
+            </div>
+          </div>
+          <div class="time-group" role="group" aria-label="Afternoon">
+            <p class="time-group-label" aria-hidden="true">Afternoon</p>
+            <div class="choice-options">
+              <label class="choice-option"><input type="radio" name="lessonTime" value="1:00 PM"><span>1:00 PM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="2:00 PM"><span>2:00 PM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="3:00 PM"><span>3:00 PM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="4:00 PM"><span>4:00 PM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="5:00 PM"><span>5:00 PM</span></label>
+            </div>
+          </div>
+          <div class="time-group" role="group" aria-label="Evening">
+            <p class="time-group-label" aria-hidden="true">Evening</p>
+            <div class="choice-options">
+              <label class="choice-option"><input type="radio" name="lessonTime" value="6:00 PM"><span>6:00 PM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="7:00 PM"><span>7:00 PM</span></label>
+              <label class="choice-option"><input type="radio" name="lessonTime" value="8:00 PM"><span>8:00 PM</span></label>
+            </div>
+          </div>
+        </fieldset>
+        <p class="error-text" id="timeError"></p>
 
-        <button id="bookBtn">Add Lesson to Cart</button>
-        <p class="booking-note">Your lesson is reserved when you check out. You can add snacks, gear, or racquet services to the same order.</p>
-        <p id="bookingMessage"></p>
+        <p class="live-total" id="lessonTotal"></p>
+        <button id="bookBtn">Add to Cart</button>
+        <p class="booking-note">Your lesson is reserved when you place your order. You can add snacks, gear, or services to the same order.</p>
+        <p id="bookingMessage" role="alert"></p>
       </section>
     </main>
 
@@ -79,6 +138,7 @@
       <p>&copy; 2026 CourtSide. All rights reserved.</p>
     </footer>
 
+    <script src="product-images.js"></script>
     <script src="cart.js"></script>
     <script src="script.js"></script>
   </body>

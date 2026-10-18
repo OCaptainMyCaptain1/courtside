@@ -3,18 +3,19 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CourtSide | Lessons, Snacks, Gear &amp; Racquet Service</title>
+    <title>CourtSide | Lessons, Snacks, Gear &amp; Services</title>
     <link rel="stylesheet" href="styles.css">
   </head>
 
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
 
     <header>
       <h1><a href="index.html">CourtSide</a></h1>
-      <nav>
+      <nav aria-label="Main">
         <a href="index.html">Home</a>
         <a href="lessons.html" class="nav-cta">Book a Lesson</a>
-        <a href="reviews.html">Reviews &amp; Feedback</a>
+        <a href="reviews.html">Reviews</a>
         <a href="snacks.html">Snack Shop</a>
         <a href="proshop.html">Pro Shop</a>
         <a href="services.html">Services</a>
@@ -24,7 +25,7 @@
 
     <div class="hero-band"></div>
 
-    <main class="wide">
+    <main id="main" tabindex="-1" class="wide">
       <section class="hero hero-split">
         <div class="hero-text">
           <h2>Great coaching at a price that makes sense.</h2>
@@ -57,10 +58,10 @@
           </div>
           <div class="feature-card">
             <h3>Booked in under a minute</h3>
-            <p>Choose a coach, date, and time, then check out. No phone calls and no waiting at the front desk to see who is free.</p>
+            <p>Choose a coach, date, and time, add it to your cart, then check out. No phone calls and no waiting at the front desk to see who is free.</p>
           </div>
         </div>
-        <p class="section-cta"><a class="hero-button" href="lessons.html">Choose your coach</a></p>
+        <p class="section-cta"><a class="hero-button" href="lessons.html">Book a Lesson</a></p>
       </section>
 
       <section class="home-section addons">
@@ -71,18 +72,18 @@
         <div class="feature-grid three">
           <div class="feature-card compact">
             <h3>Snack Shop</h3>
-            <p>Order from your phone and pick it up at the counter, or have it brought to your court.</p>
-            <a href="snacks.html">Order snacks</a>
+            <p>Order from your phone and pick it up at the front desk, or have it delivered to your court.</p>
+            <a href="snacks.html">Visit the Snack Shop</a>
           </div>
           <div class="feature-card compact">
             <h3>Pro Shop</h3>
             <p>Racquets, grips, bags, and more. Browse anytime and pick up at the front desk.</p>
-            <a href="proshop.html">Shop gear</a>
+            <a href="proshop.html">Visit the Pro Shop</a>
           </div>
           <div class="feature-card compact">
-            <h3>Racquet Services</h3>
+            <h3>Services</h3>
             <p>Choose your string and tension online. Stringing is ready within 24 hours.</p>
-            <a href="services.html">See services</a>
+            <a href="services.html">View Services</a>
           </div>
         </div>
       </section>
@@ -92,6 +93,7 @@
       <p>&copy; 2026 CourtSide. All rights reserved.</p>
     </footer>
 
+    <script src="product-images.js"></script>
     <script src="cart.js"></script>
   </body>
 </html>

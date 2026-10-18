@@ -23,12 +23,21 @@ function renderSummary() {
     const optionsLine = item.options ? `<small>${item.options}</small>` : "";
     summaryItems.innerHTML += `
       <div class="summary-line">
-        <span>${item.quantity} &times; ${item.name}${optionsLine}</span>
+        <span class="summary-item">
+          ${productThumbHTML(item.name)}
+          <span>${item.quantity} &times; ${item.name}${optionsLine}</span>
+        </span>
         <span>$${(item.price * item.quantity).toFixed(2)}</span>
       </div>`;
   });
 
-  document.getElementById("summaryTotal").textContent = "Total: $" + calculateTotal(cart).toFixed(2);
+  const subtotal = calculateTotal(cart);
+  const totalText = "Total: $" + calculateOrderTotal(cart).toFixed(2);
+  document.getElementById("summarySubtotal").textContent = "$" + subtotal.toFixed(2);
+  document.getElementById("summaryTaxLabel").textContent = "Tax (" + TAX_PERCENT_TEXT + ")";
+  document.getElementById("summaryTax").textContent = "$" + calculateTax(subtotal).toFixed(2);
+  document.getElementById("summaryTotal").textContent = totalText;
+  document.getElementById("placeOrderTotal").textContent = totalText + " (includes " + TAX_PERCENT_TEXT + " tax)";
 
   // Pickup and court delivery only matter if the order has something to hand over (lessons alone don't)
   const needsFulfillment = hasPhysicalItems(cart);
@@ -75,7 +84,7 @@ const validators = {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()) ? "" : "Enter a valid email, like name@example.com.";
   },
   courtNumber: function (value) {
-    return courtRadio.checked && value.trim() === "" ? "Enter your court number so we know where to bring your order." : "";
+    return courtRadio.checked && value.trim() === "" ? "Enter your court number so we know where to deliver your order." : "";
   },
   cardNumber: function (value) {
     const digits = value.replace(/\s/g, "");
@@ -91,11 +100,14 @@ const validators = {
 function showError(input, message) {
   document.getElementById(input.id + "Error").textContent = message;
   input.classList.toggle("invalid", message !== "");
+  // Let screen readers know the field has a problem and where the message is
+  input.setAttribute("aria-invalid", message !== "" ? "true" : "false");
 }
 
 // Validate when the customer leaves a box (blur); once a box shows an error, re-check as they type (input)
 Object.keys(validators).forEach(function (id) {
   const input = document.getElementById(id);
+  input.setAttribute("aria-describedby", id + "Error");
 
   input.addEventListener("blur", function () {
     showError(input, validators[id](input.value));
@@ -138,28 +150,80 @@ document.getElementById("fillTestCardBtn").addEventListener("click", function ()
 
 // ---------- Place order ----------
 
+// The box at the top of the form that lists every problem, with a link to each field
+function showErrorSummary(errors) {
+  const summary = document.getElementById("errorSummary");
+  summary.innerHTML = "";
+
+  const heading = document.createElement("h3");
+  heading.id = "errorSummaryTitle";
+  heading.textContent = errors.length === 1
+    ? "1 problem to fix before you can place your order:"
+    : errors.length + " problems to fix before you can place your order:";
+
+  const list = document.createElement("ul");
+  errors.forEach(function (error) {
+    const item = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = "#" + error.id;
+    link.textContent = error.message;
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      document.getElementById(error.id).focus();
+    });
+    item.appendChild(link);
+    list.appendChild(item);
+  });
+
+  summary.append(heading, list);
+  summary.classList.remove("hidden");
+  summary.focus(); // screen readers read the summary; keyboard users can tab to any link in it
+}
+
+function hideErrorSummary() {
+  document.getElementById("errorSummary").classList.add("hidden");
+}
+
 checkoutForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  let firstInvalid = null;
+  // A lesson saved earlier may have started while this page was open. Remove it before taking the order.
+  const expired = removeExpiredLessons();
+  if (expired.length > 0) {
+    announceExpiredLessons(expired);
+    return;
+  }
+
+  // The summary announces all the problems at once, so keep the field-by-field messages quiet this one time
+  const errorLines = document.querySelectorAll(".error-text");
+  errorLines.forEach(function (line) { line.setAttribute("aria-live", "off"); });
+
+  const errors = [];
   Object.keys(validators).forEach(function (id) {
     const input = document.getElementById(id);
     const message = validators[id](input.value);
     showError(input, message);
-    if (message !== "" && firstInvalid === null) firstInvalid = input;
+    if (message !== "") errors.push({ id: id, message: message });
   });
 
-  if (firstInvalid) {
-    firstInvalid.focus();
+  setTimeout(function () {
+    errorLines.forEach(function (line) { line.setAttribute("aria-live", "polite"); });
+  }, 300);
+
+  if (errors.length > 0) {
+    showErrorSummary(errors);
     return;
   }
 
+  hideErrorSummary();
   placeOrder();
 });
 
 function placeOrder() {
   const cart = getCart();
-  const total = calculateTotal(cart);
+  const subtotal = calculateTotal(cart);
+  const tax = calculateTax(subtotal);
+  const total = calculateOrderTotal(cart);
   const orderNumber = "CS-" + Math.floor(10000 + Math.random() * 90000);
   const firstName = document.getElementById("checkoutName").value.trim().split(" ")[0];
   const court = document.getElementById("courtNumber").value.trim();
@@ -171,7 +235,7 @@ function placeOrder() {
   let fulfillmentText = "";
   if (hasPhysicalItems(cart)) {
     fulfillmentText = courtRadio.checked
-      ? "We'll bring your order to court " + court + "."
+      ? "We'll deliver your order to court " + court + "."
       : "Pick up your order at the CourtSide front desk.";
   }
 
@@ -190,7 +254,7 @@ function placeOrder() {
     lessonList.appendChild(li);
   });
   document.getElementById("confirmLessonsWrapper").classList.toggle("hidden", lessons.length === 0);
-  document.getElementById("confirmTotal").textContent = "$" + total.toFixed(2);
+  document.getElementById("confirmTotal").textContent = "$" + total.toFixed(2) + " (includes $" + tax.toFixed(2) + " tax)";
 
   // Wipe everything: the form (including the card boxes) and the cart
   checkoutForm.reset();
@@ -200,4 +264,9 @@ function placeOrder() {
   document.getElementById("checkoutLayout").classList.add("hidden");
   document.getElementById("confirmation").classList.remove("hidden");
   window.scrollTo(0, 0);
+
+  // Move keyboard and screen reader focus to the confirmation, since the form it was on is gone
+  const confirmTitle = document.getElementById("confirmTitle");
+  confirmTitle.setAttribute("tabindex", "-1");
+  confirmTitle.focus();
 }

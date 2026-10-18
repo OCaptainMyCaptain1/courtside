@@ -8,13 +8,14 @@
   </head>
 
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
 
     <header>
       <h1><a href="index.html">CourtSide</a></h1>
-      <nav>
+      <nav aria-label="Main">
         <a href="index.html">Home</a>
         <a href="lessons.html" class="nav-cta">Book a Lesson</a>
-        <a href="reviews.html">Reviews &amp; Feedback</a>
+        <a href="reviews.html">Reviews</a>
         <a href="snacks.html">Snack Shop</a>
         <a href="proshop.html">Pro Shop</a>
         <a href="services.html">Services</a>
@@ -24,7 +25,7 @@
 
     <div class="hero-band"></div>
 
-    <main class="wide">
+    <main id="main" tabindex="-1" class="wide">
       <h2>Checkout</h2>
 
       <p class="prototype-banner">
@@ -41,34 +42,38 @@
 
         <form id="checkoutForm" novalidate>
 
+          <div id="errorSummary" class="error-summary hidden" role="group" aria-labelledby="errorSummaryTitle" tabindex="-1"></div>
+
           <section class="form-section">
             <h3>Your details</h3>
             <p>No account needed.</p>
             <label for="checkoutName">Full name</label>
             <input type="text" id="checkoutName" placeholder="John Doe" autocomplete="name">
-            <p class="error-text" id="checkoutNameError"></p>
+            <p class="error-text" id="checkoutNameError" aria-live="polite"></p>
 
             <label for="checkoutEmail">Email</label>
             <input type="email" id="checkoutEmail" placeholder="johndoe@example.com" autocomplete="email">
-            <p class="error-text" id="checkoutEmailError"></p>
+            <p class="error-text" id="checkoutEmailError" aria-live="polite"></p>
           </section>
 
           <section class="form-section" id="fulfillmentSection">
-            <h3>Pickup or court delivery</h3>
+            <fieldset class="plain-fieldset">
+            <legend>Pickup or court delivery</legend>
             <label class="radio-option" for="fulfillPickup">
               <input type="radio" name="fulfillment" id="fulfillPickup" checked>
               <span>Pick up at the CourtSide front desk</span>
             </label>
             <label class="radio-option" for="fulfillCourt">
               <input type="radio" name="fulfillment" id="fulfillCourt">
-              <span>Bring it to my court</span>
+              <span>Deliver to my court</span>
             </label>
 
             <div id="courtNumberWrapper" class="hidden">
               <label for="courtNumber">Court number</label>
               <input type="text" id="courtNumber" placeholder="e.g. 4">
-              <p class="error-text" id="courtNumberError"></p>
+              <p class="error-text" id="courtNumberError" aria-live="polite"></p>
             </div>
+            </fieldset>
           </section>
 
           <section class="form-section">
@@ -77,18 +82,18 @@
 
             <label for="cardNumber">Card number</label>
             <input type="text" id="cardNumber" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000">
-            <p class="error-text" id="cardNumberError"></p>
+            <p class="error-text" id="cardNumberError" aria-live="polite"></p>
 
             <div class="card-row">
               <div>
                 <label for="cardExpiry">Expiry (MM/YY)</label>
                 <input type="text" id="cardExpiry" inputmode="numeric" autocomplete="off" placeholder="MM/YY">
-                <p class="error-text" id="cardExpiryError"></p>
+                <p class="error-text" id="cardExpiryError" aria-live="polite"></p>
               </div>
               <div>
                 <label for="cardCvc">Security code</label>
                 <input type="text" id="cardCvc" inputmode="numeric" autocomplete="off" placeholder="123">
-                <p class="error-text" id="cardCvcError"></p>
+                <p class="error-text" id="cardCvcError" aria-live="polite"></p>
               </div>
             </div>
 
@@ -97,12 +102,17 @@
             <div class="trust-badge-placeholder">[ Trust badge placeholder: a real security or payment-provider badge would go here ]</div>
           </section>
 
+          <p id="placeOrderTotal" class="cart-total"></p>
           <button type="submit" id="placeOrderBtn">Place order (prototype)</button>
         </form>
 
         <aside class="order-summary">
           <h3>Order summary</h3>
           <div id="summaryItems"></div>
+          <div class="totals">
+            <p class="totals-line"><span>Subtotal</span><span id="summarySubtotal"></span></p>
+            <p class="totals-line"><span id="summaryTaxLabel">Tax</span><span id="summaryTax"></span></p>
+          </div>
           <p id="summaryTotal" class="cart-total"></p>
         </aside>
 
@@ -126,6 +136,7 @@
       <p>&copy; 2026 CourtSide. All rights reserved.</p>
     </footer>
 
+    <script src="product-images.js"></script>
     <script src="cart.js"></script>
     <script src="checkout.js"></script>
   </body>
