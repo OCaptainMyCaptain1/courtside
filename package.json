@@ -1,0 +1,26 @@
+{
+  "name": "courtside",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OCaptainMyCaptain1/courtside.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/OCaptainMyCaptain1/courtside/issues"
+  },
+  "homepage": "https://github.com/OCaptainMyCaptain1/courtside#readme",
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "mongoose": "^9.12.1"
+  }
+}
