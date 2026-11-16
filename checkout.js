@@ -1,4 +1,4 @@
-// Checkout page. PROTOTYPE ONLY: nothing typed here is saved, stored, or sent anywhere.
+// Checkout page. PROTOTYPE ONLY: no payment is taken and card details are never saved or sent. The order itself (name, email, items, totals) is saved to MongoDB.
 
 const TEST_CARD = "4242424242424242";
 let orderPlaced = false;
@@ -219,7 +219,7 @@ checkoutForm.addEventListener("submit", function (event) {
   placeOrder();
 });
 
-function placeOrder() {
+async function placeOrder() {
   const cart = getCart();
   const subtotal = calculateTotal(cart);
   const tax = calculateTax(subtotal);
@@ -239,6 +239,28 @@ function placeOrder() {
       : "Pick up your order at the CourtSide front desk.";
   }
 
+    const placeBtn = document.getElementById("placeOrderBtn");
+  placeBtn.disabled = true;
+
+  try {
+    await saveOrder({
+      orderNumber: orderNumber,
+      customerName: document.getElementById("checkoutName").value.trim(),
+      email: document.getElementById("checkoutEmail").value.trim(),
+      fulfillment: hasPhysicalItems(cart) ? (courtRadio.checked ? "court" : "pickup") : "none",
+      courtNumber: courtRadio.checked ? court : "",
+      items: cart,
+      subtotal: subtotal,
+      tax: tax,
+      total: total
+    });
+  } catch (error) {
+    placeBtn.disabled = false;
+    showErrorSummary([{ id: "placeOrderBtn", message: "We couldn't save your order. Please try again." }]);
+    return;
+  }
+
+  hideErrorSummary();
   orderPlaced = true;
 
   document.getElementById("confirmTitle").textContent = "Thanks for your order, " + firstName + "!";
@@ -269,4 +291,15 @@ function placeOrder() {
   const confirmTitle = document.getElementById("confirmTitle");
   confirmTitle.setAttribute("tabindex", "-1");
   confirmTitle.focus();
+}
+
+// Sends the order (never the card details) to our server, which saves it in MongoDB
+async function saveOrder(order) {
+  const response = await fetch("/api/orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(order)
+  });
+  if (!response.ok) throw new Error("Order could not be saved");
+  return response.json();
 }
