@@ -1,0 +1,12 @@
+<header>
+  <h1><a routerLink="/">CourtSide</a></h1>
+  <nav aria-label="Main">
+    <a routerLink="/" routerLinkActive ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/lessons" routerLinkActive ariaCurrentWhenActive="page" class="nav-cta">Book a Lesson</a>
+    <a routerLink="/reviews" routerLinkActive ariaCurrentWhenActive="page">Reviews</a>
+    <a routerLink="/snacks" routerLinkActive ariaCurrentWhenActive="page">Snack Shop</a>
+    <a routerLink="/proshop" routerLinkActive ariaCurrentWhenActive="page">Pro Shop</a>
+    <a routerLink="/services" routerLinkActive ariaCurrentWhenActive="page">Services</a>
+    <a href="#" id="cartLink">Cart (<span class="cart-count">0</span>)</a>
+  </nav>
+</header>

@@ -1,0 +1,63 @@
+<main id="main" tabindex="-1" class="wide">
+  <section class="shop">
+    <h2>{{ heading }}</h2>
+
+    <p class="shop-note">
+      @if (lead) {
+        <strong>{{ lead }}</strong>
+      }
+      {{ note }}
+    </p>
+
+    @if (loading()) {
+      <p role="status">Loading...</p>
+    } @else if (errorMessage()) {
+      <p class="error-text" role="alert">{{ errorMessage() }}</p>
+    } @else {
+      <div class="product-grid">
+        @for (product of products(); track product._id) {
+          <div class="product-card">
+            <figure class="product-photo">
+              <div class="photo-placeholder" aria-hidden="true">
+                <span class="photo-placeholder-initials">{{ initials(product.name) }}</span>
+                <span class="photo-placeholder-label">Photo coming soon</span>
+              </div>
+              <figcaption class="photo-credit">
+                Photo by <span class="credit-blank">&nbsp;</span> on
+                <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>
+              </figcaption>
+            </figure>
+
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p class="product-price">
+              {{ product.price | currency }}@if (product.priceUnit) { {{ product.priceUnit }}}
+            </p>
+            @if (product.priceNote) {
+              <p class="field-hint">{{ product.priceNote }}</p>
+            }
+
+            @if (product.optionLabel) {
+              <fieldset class="choice-group">
+                <legend>{{ product.optionLabel }}:</legend>
+                <div class="choice-options">
+                  @for (value of product.optionValues; track value; let first = $first) {
+                    <label class="choice-option">
+                      <input type="radio" [name]="'option-' + product._id" [value]="value" [checked]="first">
+                      <span>{{ value }}</span>
+                    </label>
+                  }
+                </div>
+              </fieldset>
+            }
+
+            @if (!product.inStock) {
+              <p><strong>Out of stock</strong></p>
+            }
+            <button type="button" class="addBtn" [disabled]="!product.inStock">Add to Cart</button>
+          </div>
+        }
+      </div>
+    }
+  </section>
+</main>
