@@ -7,6 +7,7 @@
     <a routerLink="/snacks" routerLinkActive ariaCurrentWhenActive="page">Snack Shop</a>
     <a routerLink="/proshop" routerLinkActive ariaCurrentWhenActive="page">Pro Shop</a>
     <a routerLink="/services" routerLinkActive ariaCurrentWhenActive="page">Services</a>
-    <a href="#" id="cartLink">Cart (<span class="cart-count">0</span>)</a>
+    <!-- The Cart link opens a panel, so tell assistive technology it behaves like a button -->
+    <a href="#" id="cartLink" role="button" aria-haspopup="dialog" (click)="openCart($event)" (keydown.space)="openCart($event)">Cart (<span class="cart-count">{{ cart.count() }}</span>)</a>
   </nav>
 </header>

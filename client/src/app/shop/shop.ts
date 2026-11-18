@@ -1,11 +1,11 @@
-import { CurrencyPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../product';
+import { ProductCard } from '../product-card/product-card';
 import { ProductService } from '../product-service';
 
 @Component({
-  imports: [CurrencyPipe],
+  imports: [ProductCard],
   selector: 'app-shop',
   styleUrl: './shop.css',
   templateUrl: './shop.html',
@@ -36,15 +36,5 @@ export class Shop {
         this.loading.set(false);
       }
     });
-  }
-
-  // "Trail Mix" -> "TM", "Tennis Bag" -> "TB" (used for the photo placeholder)
-  protected initials(name: string): string {
-    return name
-      .split(' ')
-      .filter((word) => /^[A-Za-z]/.test(word))
-      .slice(0, 2)
-      .map((word) => word.charAt(0).toUpperCase())
-      .join('');
   }
 }

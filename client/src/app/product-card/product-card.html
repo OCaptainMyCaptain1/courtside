@@ -1,0 +1,92 @@
+<figure class="product-photo">
+  <div class="photo-placeholder" aria-hidden="true">
+    <span class="photo-placeholder-initials">{{ initials(product().name) }}</span>
+    <span class="photo-placeholder-label">Photo coming soon</span>
+  </div>
+  <figcaption class="photo-credit">
+    Photo by <span class="credit-blank">&nbsp;</span> on
+    <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>
+  </figcaption>
+</figure>
+
+<h3>{{ product().name }}</h3>
+<p>{{ product().description }}</p>
+
+<p class="product-price">
+  {{ unitPrice() | currency }}@if (product().priceUnit) { {{ product().priceUnit }}}
+</p>
+@if (product().priceNote) {
+  <p class="field-hint">{{ product().priceNote }}</p>
+}
+
+@if (product().optionLabel) {
+  <fieldset class="choice-group">
+    <legend>{{ product().optionLabel }}:</legend>
+    <div class="choice-options">
+      @for (option of product().options; track option.value; let i = $index) {
+        <label class="choice-option">
+          <input
+            type="radio"
+            [name]="'option-' + product()._id"
+            [value]="option.value"
+            [checked]="i === selectedIndex()"
+            (change)="chooseOption(i)"
+          >
+          <span>{{ option.value }}</span>
+        </label>
+      }
+    </div>
+  </fieldset>
+}
+
+@if (product().hasTension) {
+  <fieldset class="choice-group unit-switch">
+    <legend>Tension unit:</legend>
+    <div class="choice-options">
+      <label class="choice-option">
+        <input type="radio" [name]="'unit-' + product()._id" value="lb" [checked]="unit() === 'lb'" (change)="changeUnit('lb')">
+        <span>lbs</span>
+      </label>
+      <label class="choice-option">
+        <input type="radio" [name]="'unit-' + product()._id" value="kg" [checked]="unit() === 'kg'" (change)="changeUnit('kg')">
+        <span>kg</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <label [attr.for]="'tension-' + product()._id">{{ tensionSettings[unit()].label }}</label>
+  <input
+    #tensionInput
+    type="number"
+    class="variantInput"
+    [id]="'tension-' + product()._id"
+    [class.invalid]="tensionError()"
+    [attr.min]="tensionSettings[unit()].min"
+    [attr.max]="tensionSettings[unit()].max"
+    [attr.step]="tensionSettings[unit()].step"
+    [placeholder]="tensionSettings[unit()].placeholder"
+    [value]="tension()"
+    [attr.aria-invalid]="tensionError() ? 'true' : null"
+    [attr.aria-describedby]="'tension-hint-' + product()._id"
+    (input)="onTensionInput($event)"
+    required
+  >
+  <p class="field-hint" [id]="'tension-hint-' + product()._id">{{ tensionSettings[unit()].hint }}</p>
+  <p class="field-error" aria-live="polite">{{ tensionError() }}</p>
+}
+
+<p class="live-total" aria-live="polite">
+  Estimated total: <strong>{{ estimatedTotal() | currency }}</strong>
+  <span class="live-total-note">
+    @if (days() > 1) {
+      ({{ days() }} days &times; {{ unitPrice() | currency }}, plus {{ taxText }} tax)
+    } @else {
+      (includes {{ taxText }} tax)
+    }
+  </span>
+</p>
+
+@if (!product().inStock) {
+  <p><strong>Out of stock</strong></p>
+}
+<button type="button" class="addBtn" [disabled]="!product().inStock" (click)="addToCart()">Add to Cart</button>

@@ -6,8 +6,10 @@
     "price": 3.5,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -17,8 +19,10 @@
     "price": 2.75,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -28,8 +32,10 @@
     "price": 2.25,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -39,8 +45,10 @@
     "price": 1.5,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -50,13 +58,23 @@
     "price": 129.99,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": "Grip Size",
-    "optionValues": [
-      "Grip 4",
-      "Grip 4 1/4",
-      "Grip 4 1/2",
-      "Grip 4 5/8"
+    "options": [
+      {
+        "value": "Grip 4"
+      },
+      {
+        "value": "Grip 4 1/4"
+      },
+      {
+        "value": "Grip 4 1/2"
+      },
+      {
+        "value": "Grip 4 5/8"
+      }
     ],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -66,8 +84,10 @@
     "price": 8,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -77,8 +97,10 @@
     "price": 45,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -88,8 +110,10 @@
     "price": 6.5,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -99,8 +123,10 @@
     "price": 12,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -110,12 +136,20 @@
     "price": 25,
     "priceUnit": null,
     "priceNote": "Customer types their own tension (40 to 70 lbs).",
+    "pricing": null,
     "optionLabel": "String Type",
-    "optionValues": [
-      "Synthetic Gut",
-      "Multifilament",
-      "Polyester"
+    "options": [
+      {
+        "value": "Synthetic Gut"
+      },
+      {
+        "value": "Multifilament"
+      },
+      {
+        "value": "Polyester"
+      }
     ],
+    "hasTension": true,
     "inStock": true
   },
   {
@@ -125,11 +159,19 @@
     "price": 6,
     "priceUnit": null,
     "priceNote": "Price shown is for an overgrip. Replacement grip installation is $10.00.",
+    "pricing": null,
     "optionLabel": "Grip Type",
-    "optionValues": [
-      "Overgrip",
-      "Replacement Grip"
+    "options": [
+      {
+        "value": "Overgrip",
+        "price": 6
+      },
+      {
+        "value": "Replacement Grip",
+        "price": 10
+      }
     ],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -139,8 +181,10 @@
     "price": 15,
     "priceUnit": null,
     "priceNote": null,
+    "pricing": null,
     "optionLabel": null,
-    "optionValues": null,
+    "options": [],
+    "hasTension": false,
     "inStock": true
   },
   {
@@ -150,12 +194,23 @@
     "price": 15,
     "priceUnit": "per day",
     "priceNote": null,
+    "pricing": "perDay",
     "optionLabel": "Rental Length",
-    "optionValues": [
-      "1 Day",
-      "3 Days",
-      "1 Week"
+    "options": [
+      {
+        "value": "1 Day",
+        "days": 1
+      },
+      {
+        "value": "3 Days",
+        "days": 3
+      },
+      {
+        "value": "1 Week",
+        "days": 7
+      }
     ],
+    "hasTension": false,
     "inStock": true
   }
 ]

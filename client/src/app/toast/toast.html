@@ -1,0 +1,23 @@
+<div class="toast-region" role="status" aria-live="polite">
+  @if (toast.current(); as message) {
+    <div
+      #toastBox
+      class="toast"
+      [class.toast-warning]="message.type === 'warning'"
+      [class.show]="visible()"
+      (mouseenter)="onHover(true)"
+      (mouseleave)="onHover(false)"
+      (focusin)="onFocusIn()"
+      (focusout)="onFocusOut($event, toastBox)"
+    >
+      <span class="toast-icon" aria-hidden="true">{{ message.type === 'warning' ? '!' : '&#10003;' }}</span>
+      <p class="toast-text">{{ message.text }}</p>
+
+      @if (message.actionLabel) {
+        <button type="button" class="toast-action" (click)="runAction(message)">{{ message.actionLabel }}</button>
+      }
+
+      <button type="button" class="toast-close" aria-label="Dismiss message" (click)="toast.dismiss()">&times;</button>
+    </div>
+  }
+</div>

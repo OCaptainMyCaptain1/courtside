@@ -1,0 +1,61 @@
+<div class="cart-overlay" [class.open]="cart.isOpen()" (click)="cart.close()"></div>
+
+<aside
+  #drawer
+  id="cartDrawer"
+  class="cart-drawer"
+  [class.open]="cart.isOpen()"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="cartTitle"
+>
+  <div class="drawer-header">
+    <h2 id="cartTitle">Your Cart</h2>
+    <button #closeButton type="button" id="closeCartBtn" class="drawer-close" aria-label="Close cart" (click)="cart.close()">&times;</button>
+  </div>
+
+  <div class="drawer-items">
+    @if (cart.items().length === 0) {
+      <p class="drawer-empty">Your cart is empty. Book a lesson or add something from the shops to get started.</p>
+    } @else {
+      @for (item of cart.items(); track $index) {
+        <div class="drawer-item">
+          <span class="item-thumb item-thumb-placeholder" aria-hidden="true">{{ initials(item.name) }}</span>
+          <div class="drawer-item-body">
+            <p class="drawer-item-name">{{ item.name }} &ndash; {{ item.price | currency }}</p>
+            @if (item.options) {
+              <p class="drawer-item-options">{{ item.options }}</p>
+            }
+            <div class="drawer-item-row">
+              @if (item.type === 'lesson') {
+                <!-- A lesson is a single reserved slot, so it gets a label instead of + and - buttons -->
+                <span class="lesson-tag">1 lesson</span>
+              } @else {
+                <div class="qty-controls">
+                  <button type="button" class="qty-btn" (click)="decrease($index)" [attr.aria-label]="'Decrease quantity of ' + item.name">&minus;</button>
+                  <span>{{ item.quantity }}</span>
+                  <button type="button" class="qty-btn" (click)="increase($index)" [attr.aria-label]="'Increase quantity of ' + item.name">+</button>
+                </div>
+              }
+              <strong>{{ item.price * item.quantity | currency }}</strong>
+              <button type="button" class="removeBtn" [attr.data-index]="$index" (click)="remove($index)" [attr.aria-label]="'Remove ' + item.name + ' from cart'">Remove</button>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <p class="visually-hidden" role="status">{{ announcement() }}</p>
+
+  @if (cart.items().length > 0) {
+    <div class="drawer-footer">
+      <div class="totals">
+        <p class="totals-line"><span>Subtotal</span><span>{{ cart.subtotal() | currency }}</span></p>
+        <p class="totals-line"><span>Tax ({{ taxText }})</span><span>{{ cart.tax() | currency }}</span></p>
+      </div>
+      <p class="cart-total">Total: {{ cart.total() | currency }}</p>
+      <a routerLink="/checkout" class="checkout-link" (click)="cart.close()">Checkout</a>
+    </div>
+  }
+</aside>

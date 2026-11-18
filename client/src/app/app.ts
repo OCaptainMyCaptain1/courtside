@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CartDrawer } from './cart-drawer/cart-drawer';
 import { Footer } from './footer/footer';
 import { Header } from './header/header';
+import { Toast } from './toast/toast';
 
 @Component({
-  imports: [RouterOutlet, Header, Footer],
+  imports: [RouterOutlet, Header, Footer, CartDrawer, Toast],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',

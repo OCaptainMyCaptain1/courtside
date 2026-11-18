@@ -21,8 +21,10 @@ const productSchema = new mongoose.Schema({
   price: Number,
   priceUnit: String,
   priceNote: String,
-  optionLabel: String,
-  optionValues: [String],
+  pricing: String,         // "perDay" for rentals, otherwise empty
+  optionLabel: String,     // e.g. "Grip Size"
+  options: [{ _id: false, value: String, price: Number, days: Number }],
+  hasTension: Boolean,     // true if the customer types a string tension (stringing)
   inStock: { type: Boolean, default: true }
 });
 const Product = mongoose.model('Product', productSchema);
@@ -55,9 +57,10 @@ const Order = mongoose.model('Order', orderSchema);
 
 async function seedProducts() {
   const file = path.join(__dirname, 'products', 'products.json');
-  const products = JSON.parse(fs.readFileSync(file, 'utf8')).map(function (p) {
-    return { ...p, optionValues: p.optionValues || [] };
-  });
+  const products = JSON.parse(fs.readFileSync(file, 'utf8'));
+
+  // Remove the old optionValues field left on products saved before options had prices
+  await Product.collection.updateMany({}, { $unset: { optionValues: '' } });
 
   await Product.bulkWrite(products.map(function (p) {
     const { inStock, ...rest } = p;
