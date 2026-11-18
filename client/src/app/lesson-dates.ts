@@ -1,6 +1,7 @@
 // Lesson date helpers (shared by the lesson page, the cart, and checkout)
 
 // How far ahead a lesson can be booked. Change this one number to adjust the window.
+// (keep in sync with MAX_BOOKING_MONTHS in lesson-rules.js on the server)
 export const MAX_BOOKING_MONTHS = 6;
 
 // Turn a Date into YYYY-MM-DD in the customer's own time zone
@@ -20,6 +21,13 @@ export function maxDateString(): string {
   const limit = new Date();
   limit.setMonth(limit.getMonth() + MAX_BOOKING_MONTHS);
   return dateToString(limit);
+}
+
+// "2026-12-05" -> "Sat, Dec 5, 2026" (built from the parts so time zones can't shift the day)
+export function formatLessonDate(dateString: string): string {
+  const parts = dateString.split('-').map(Number);
+  const date = new Date(parts[0], parts[1] - 1, parts[2]);
+  return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 // Compare two YYYY-MM-DD strings as numbers. Returns negative, zero, or positive.

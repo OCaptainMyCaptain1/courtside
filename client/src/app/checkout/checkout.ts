@@ -221,6 +221,7 @@ export class Checkout {
         options: item.options,
         quantity: item.quantity,
         type: item.type,
+        coach: item.coach,
         date: item.date,
         time: item.time
       }))

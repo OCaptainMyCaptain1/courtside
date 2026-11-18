@@ -1,6 +1,8 @@
 // Works out what an order costs, using prices from the database.
 // The browser's prices are never trusted: only product names, options, and quantities are used.
 
+const { formatLessonDate, checkLessonSlot } = require('./lesson-rules');
+
 const TAX_RATE = 0.08;
 
 // An order problem the customer can fix (bad option, out of stock, and so on)
@@ -47,14 +49,16 @@ function unitPrice(product, optionsText) {
 }
 
 // items: the cart as the browser sent it. products: matching products from MongoDB.
+// coachNames: the coaches that exist (from MongoDB).
 // Returns the priced lines and the totals, or throws an OrderError.
-function priceOrder(items, products) {
+function priceOrder(items, products, coachNames) {
   if (!Array.isArray(items) || items.length === 0 || items.length > 50) {
     throw new OrderError('Your cart is empty or has too many items.');
   }
 
   const byName = new Map(products.map(function (product) { return [product.name, product]; }));
   const lines = [];
+  const lessonSlots = [];
 
   items.forEach(function (item) {
     const name = String(item.name || '');
@@ -77,14 +81,30 @@ function priceOrder(items, products) {
     };
 
     if (isLesson) {
+      const coach = String(item.coach || '');
       const date = String(item.date || '');
       const time = String(item.time || '');
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{1,2}:\d{2} (AM|PM)$/.test(time)) {
-        throw new OrderError('A lesson in your cart is missing its date or time.');
-      }
+
+      if (!(coachNames || []).includes(coach)) throw new OrderError('Choose a coach for your lesson.');
+      const problem = checkLessonSlot(date, time);
+      if (problem) throw new OrderError('The lesson with ' + coach + ' cannot be booked: ' + problem + '.');
+
+      // The server writes the description itself, so it always matches what is booked
+      line.options = coach + ', ' + formatLessonDate(date) + ', ' + time;
       line.type = 'lesson';
+      line.coach = coach;
       line.date = date;
       line.time = time;
+
+      // The same coach (or the same customer) cannot be in two places at once
+      lessonSlots.forEach(function (other) {
+        if (other.date === date && other.time === time) {
+          throw new OrderError(other.coach === coach
+            ? 'You added the same lesson twice.'
+            : 'You have two lessons at the same date and time. Remove one.');
+        }
+      });
+      lessonSlots.push({ coach: coach, date: date, time: time });
     }
 
     lines.push(line);

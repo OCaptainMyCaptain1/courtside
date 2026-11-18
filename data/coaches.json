@@ -1,0 +1,7 @@
+[
+  { "name": "Coach 1", "focus": "Serve and footwork", "position": 1 },
+  { "name": "Coach 2", "focus": "Beginners and juniors", "position": 2 },
+  { "name": "Coach 3", "focus": "Match strategy", "position": 3 },
+  { "name": "Coach 4", "focus": "Competitive training", "position": 4 },
+  { "name": "Coach 5", "focus": "Backhand and consistency", "position": 5 }
+]

@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { priceOrder, OrderError } = require('./order-pricing');
+const lessonRules = require('./lesson-rules');
 
 const app = express();
 app.use(express.json());
@@ -31,6 +32,25 @@ const productSchema = new mongoose.Schema({
 });
 const Product = mongoose.model('Product', productSchema);
 
+const coachSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  focus: String,
+  position: Number
+});
+const Coach = mongoose.model('Coach', coachSchema);
+
+// One document per booked lesson. The unique index on coach + date + time is what
+// makes double-booking impossible: MongoDB itself refuses a second booking for the same slot.
+const bookingSchema = new mongoose.Schema({
+  coach: { type: String, required: true },
+  date: { type: String, required: true },   // YYYY-MM-DD
+  time: { type: String, required: true },   // e.g. "9:00 AM"
+  orderNumber: String,
+  createdAt: { type: Date, default: Date.now }
+});
+bookingSchema.index({ coach: 1, date: 1, time: 1 }, { unique: true });
+const Booking = mongoose.model('Booking', bookingSchema);
+
 const orderSchema = new mongoose.Schema({
   orderNumber: String,
   customerName: { type: String, required: true, trim: true },
@@ -43,6 +63,7 @@ const orderSchema = new mongoose.Schema({
     quantity: Number,
     options: String,
     type: { type: String },
+    coach: String,
     date: String,
     time: String
   }],
@@ -78,10 +99,26 @@ async function seedProducts() {
   console.log('Products ready (' + products.length + ' in catalog)');
 }
 
+// Same idea for the coaches (data/coaches.json)
+async function seedCoaches() {
+  const file = path.join(__dirname, 'data', 'coaches.json');
+  const coaches = JSON.parse(fs.readFileSync(file, 'utf8'));
+
+  await Coach.bulkWrite(coaches.map(function (coach) {
+    return { updateOne: { filter: { name: coach.name }, update: { $set: coach }, upsert: true } };
+  }));
+
+  console.log('Coaches ready (' + coaches.length + ')');
+}
+
 mongoose.connect(MONGODB_URI)
   .then(function () {
     console.log('Connected to MongoDB');
     return seedProducts();
+  })
+  .then(seedCoaches)
+  .then(function () {
+    return Booking.init();   // makes sure the unique booking index exists before orders arrive
   })
   .catch(function (err) {
     console.error('MongoDB connection error:', err);
@@ -96,6 +133,41 @@ app.get('/api/products', async (req, res) => {
     res.json(await Product.find(filter).sort({ _id: 1 }).lean());
   } catch (err) {
     res.status(500).json({ error: 'Could not load products.' });
+  }
+});
+
+// Everything the lesson page needs: price, coaches, and the times that can be booked
+app.get('/api/lessons', async (req, res) => {
+  try {
+    const product = await Product.findOne({ category: 'lesson' }).lean();
+    const coaches = await Coach.find().sort({ position: 1 }).lean();
+    if (!product) return res.status(404).json({ error: 'Lessons are not available right now.' });
+
+    res.json({
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      coaches: coaches,
+      timeGroups: lessonRules.TIME_GROUPS
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Could not load lessons.' });
+  }
+});
+
+// Which times one coach already has booked on one day: /api/lessons/availability?coach=Coach 1&date=2026-12-05
+app.get('/api/lessons/availability', async (req, res) => {
+  try {
+    const coach = String(req.query.coach || '');
+    const date = String(req.query.date || '');
+    if (!coach || !lessonRules.isRealDate(date)) {
+      return res.status(400).json({ error: 'A coach and a valid date are required.' });
+    }
+
+    const bookings = await Booking.find({ coach: coach, date: date }).lean();
+    res.json({ coach: coach, date: date, bookedTimes: bookings.map(function (booking) { return booking.time; }) });
+  } catch (err) {
+    res.status(500).json({ error: 'Could not check availability.' });
   }
 });
 
@@ -128,20 +200,47 @@ app.post('/api/orders', async (req, res) => {
 
     const names = Array.isArray(b.items) ? b.items.map(function (item) { return String(item && item.name); }) : [];
     const products = await Product.find({ name: { $in: names } }).lean();
-    const priced = priceOrder(b.items, products);
+    const coachNames = (await Coach.find().lean()).map(function (coach) { return coach.name; });
+    const priced = priceOrder(b.items, products, coachNames);
 
     const orderNumber = await newOrderNumber();
-    await Order.create({
-      orderNumber: orderNumber,
-      customerName: customerName,
-      email: email,
-      fulfillment: b.fulfillment,
-      courtNumber: b.fulfillment === 'court' ? courtNumber : '',
-      items: priced.lines,
-      subtotal: priced.subtotal,
-      tax: priced.tax,
-      total: priced.total
-    });
+
+    // Reserve the lesson slots first. If MongoDB refuses one because it is already booked,
+    // undo the ones we just made and tell the customer.
+    const reserved = [];
+    try {
+      for (const line of priced.lines.filter(function (line) { return line.type === 'lesson'; })) {
+        reserved.push(await Booking.create({ coach: line.coach, date: line.date, time: line.time, orderNumber: orderNumber }));
+      }
+    } catch (err) {
+      await Booking.deleteMany({ _id: { $in: reserved.map(function (booking) { return booking._id; }) } });
+      if (err && err.code === 11000) {
+        const slot = err.keyValue || {};
+        return res.status(409).json({
+          error: slot.coach + ' at ' + lessonRules.formatLessonDate(slot.date) + ', ' + slot.time +
+            ' was just booked by someone else. Remove that lesson from your cart and choose another time.'
+        });
+      }
+      throw err;
+    }
+
+    try {
+      await Order.create({
+        orderNumber: orderNumber,
+        customerName: customerName,
+        email: email,
+        fulfillment: b.fulfillment,
+        courtNumber: b.fulfillment === 'court' ? courtNumber : '',
+        items: priced.lines,
+        subtotal: priced.subtotal,
+        tax: priced.tax,
+        total: priced.total
+      });
+    } catch (err) {
+      // The order did not save, so give the lesson slots back
+      await Booking.deleteMany({ _id: { $in: reserved.map(function (booking) { return booking._id; }) } });
+      throw err;
+    }
 
     res.status(201).json({
       orderNumber: orderNumber,

@@ -5,6 +5,7 @@ export interface NewOrderItem {
   options: string;
   quantity: number;
   type?: 'lesson';
+  coach?: string;
   date?: string;
   time?: string;
 }
@@ -32,7 +33,7 @@ export interface SavedOrder {
   email: string;
   fulfillment: 'pickup' | 'court' | 'none';
   courtNumber: string;
-  items: { name: string; price: number; quantity: number; options: string; type?: string; date?: string; time?: string }[];
+  items: { name: string; price: number; quantity: number; options: string; type?: string; coach?: string; date?: string; time?: string }[];
   subtotal: number;
   tax: number;
   total: number;

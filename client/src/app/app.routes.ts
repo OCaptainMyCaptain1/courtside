@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Checkout } from './checkout/checkout';
 import { Home } from './home/home';
+import { Lessons } from './lessons/lessons';
 import { OrderLookup } from './order-lookup/order-lookup';
 import { Shop } from './shop/shop';
 
@@ -9,6 +10,11 @@ export const routes: Routes = [
     path: '',
     component: Home,
     title: 'CourtSide | Lessons, Snacks, Gear & Services'
+  },
+  {
+    path: 'lessons',
+    component: Lessons,
+    title: 'CourtSide | Book a Lesson'
   },
   {
     path: 'snacks',

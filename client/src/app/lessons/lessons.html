@@ -1,0 +1,90 @@
+<main id="main" tabindex="-1">
+  <section class="lesson-offer" (change)="bookingMessage.set('')">
+    <h2>Private 1-on-1 Tennis Lesson</h2>
+    <img src="images/lesson.jpg" alt="Tennis coach demonstrating a forehand swing to a student">
+    <p class="photo-credit">
+      Photo by <a href="https://unsplash.com/@sagredophotography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener">Richard Sagredo</a> on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>
+    </p>
+    <p>
+      Work one-on-one with a certified instructor to sharpen your serve,
+      footwork, and match strategy. Sessions are tailored to your skill
+      level, whether you're picking up a racquet for the first time or
+      training for competitive play.
+    </p>
+
+    @if (info(); as lesson) {
+      <p class="price">{{ lesson.price | currency: 'USD' : 'symbol' : '1.0-0' }} per 60-minute session</p>
+      <p class="price-note">Certified coaches, sessions built around your game, and no long-term commitment.</p>
+
+      <fieldset class="choice-group" id="coachGroup" [class.has-error]="coachError()" aria-describedby="coachError">
+        <legend>Choose Your Coach:</legend>
+        <div class="coach-grid">
+          @for (c of lesson.coaches; track c._id; let i = $index) {
+            <label class="coach-card">
+              <input type="radio" name="coach" [id]="'coach-' + i" [value]="c.name" [checked]="coach() === c.name" (change)="chooseCoach(c.name)">
+              <span class="coach-card-body">
+                <span class="coach-avatar" aria-hidden="true">{{ avatar(c.name) }}</span>
+                <span class="coach-name">{{ c.name }}</span>
+                <span class="coach-focus">{{ c.focus }}</span>
+              </span>
+            </label>
+          }
+        </div>
+      </fieldset>
+      <p class="error-text" id="coachError">{{ coachError() }}</p>
+
+      <label for="dateInput">Choose a Date:</label>
+      <input
+        type="date"
+        id="dateInput"
+        required
+        [min]="minDate"
+        [max]="maxDate"
+        [value]="date()"
+        [class.has-error]="dateError()"
+        [attr.aria-invalid]="dateError() ? 'true' : null"
+        aria-describedby="dateHint dateError"
+        (input)="onDateInput($event)"
+        (change)="onDateInput($event)"
+      >
+      <p id="dateHint" class="field-hint">{{ dateHint }}</p>
+      <p class="error-text" id="dateError">{{ dateError() }}</p>
+
+      <fieldset class="choice-group" id="timeGroup" [class.has-error]="timeError()" aria-describedby="timeHint timeError">
+        <legend>Choose a Time:</legend>
+        <p class="field-hint" id="timeHint" aria-live="polite">{{ timeHint() }}</p>
+        @for (group of lesson.timeGroups; track group.label) {
+          <div class="time-group" role="group" [attr.aria-label]="group.label">
+            <p class="time-group-label" aria-hidden="true">{{ group.label }}</p>
+            <div class="choice-options">
+              @for (t of group.times; track t) {
+                <label class="choice-option">
+                  <input type="radio" name="lessonTime" [value]="t" [checked]="time() === t" [disabled]="isUnavailable(t)" (change)="chooseTime(t)">
+                  <span>{{ t }}</span>
+                </label>
+              }
+            </div>
+          </div>
+        }
+      </fieldset>
+      <p class="error-text" id="timeError">{{ timeError() }}</p>
+
+      <p class="live-total">Estimated total: {{ estimate() | currency }} (60-minute lesson, includes tax)</p>
+      <button type="button" id="bookBtn" (click)="addToCart()">Add to Cart</button>
+      <p class="booking-note">Your lesson is reserved when you place your order. You can add snacks, gear, or services to the same order.</p>
+
+      @if (bookingMessage()) {
+        <p id="bookingMessage" role="alert">
+          {{ bookingMessage() }}
+          @if (showViewCart()) {
+            <button type="button" class="inline-link-btn" (click)="openCart($event)">View cart</button>
+          }
+        </p>
+      }
+    } @else if (loadError()) {
+      <p class="error-text" role="alert">{{ loadError() }}</p>
+    } @else {
+      <p role="status">Loading...</p>
+    }
+  </section>
+</main>
