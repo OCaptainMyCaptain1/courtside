@@ -212,5 +212,18 @@
     ],
     "hasTension": false,
     "inStock": true
+  },
+  {
+    "name": "Private Lesson (60 min)",
+    "description": "One-on-one 60-minute session with a certified coach.",
+    "category": "lesson",
+    "price": 45,
+    "priceUnit": null,
+    "priceNote": null,
+    "pricing": null,
+    "optionLabel": null,
+    "options": [],
+    "hasTension": false,
+    "inStock": true
   }
 ]

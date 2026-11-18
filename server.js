@@ -3,6 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+const { priceOrder, OrderError } = require('./order-pricing');
 
 const app = express();
 app.use(express.json());
@@ -97,25 +99,60 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// Save a new order
+// ---------- Orders ----------
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Order numbers look like CS-48213. Try again if one is already taken.
+async function newOrderNumber() {
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const number = 'CS-' + crypto.randomInt(10000, 100000);
+    if (!(await Order.exists({ orderNumber: number }))) return number;
+  }
+  throw new Error('Could not create an order number.');
+}
+
+// Place a new order. The server checks the customer details, then prices every
+// item from the database itself, so a browser cannot change what it pays.
 app.post('/api/orders', async (req, res) => {
   try {
-    const b = req.body;
-    // Only these fields are saved. Card details are never accepted.
-    const order = await Order.create({
-      orderNumber: b.orderNumber,
-      customerName: b.customerName,
-      email: b.email,
+    const b = req.body || {};
+    const customerName = String(b.customerName || '').trim();
+    const email = String(b.email || '').trim();
+    const courtNumber = String(b.courtNumber || '').trim();
+
+    if (customerName.length < 2) throw new OrderError('Enter your full name.');
+    if (!EMAIL_PATTERN.test(email)) throw new OrderError('Enter a valid email address.');
+    if (!['pickup', 'court', 'none'].includes(b.fulfillment)) throw new OrderError('Choose pickup or court delivery.');
+    if (b.fulfillment === 'court' && courtNumber === '') throw new OrderError('Enter your court number.');
+
+    const names = Array.isArray(b.items) ? b.items.map(function (item) { return String(item && item.name); }) : [];
+    const products = await Product.find({ name: { $in: names } }).lean();
+    const priced = priceOrder(b.items, products);
+
+    const orderNumber = await newOrderNumber();
+    await Order.create({
+      orderNumber: orderNumber,
+      customerName: customerName,
+      email: email,
       fulfillment: b.fulfillment,
-      courtNumber: b.courtNumber,
-      items: b.items,
-      subtotal: b.subtotal,
-      tax: b.tax,
-      total: b.total
+      courtNumber: b.fulfillment === 'court' ? courtNumber : '',
+      items: priced.lines,
+      subtotal: priced.subtotal,
+      tax: priced.tax,
+      total: priced.total
     });
-    res.status(201).json({ id: order._id });
+
+    res.status(201).json({
+      orderNumber: orderNumber,
+      subtotal: priced.subtotal,
+      tax: priced.tax,
+      total: priced.total
+    });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    if (err instanceof OrderError) return res.status(400).json({ error: err.message });
+    console.error('Order failed:', err);
+    res.status(500).json({ error: 'We could not save your order. Please try again.' });
   }
 });
 

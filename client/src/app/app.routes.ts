@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
+import { Checkout } from './checkout/checkout';
 import { Home } from './home/home';
+import { OrderLookup } from './order-lookup/order-lookup';
 import { Shop } from './shop/shop';
 
 export const routes: Routes = [
@@ -38,6 +40,16 @@ export const routes: Routes = [
       heading: 'Services',
       note: 'Drop your racquet off at the CourtSide front desk after you check out. Stringing is ready within 24 hours, and grip installation is done while you wait. Demo racquets are picked up at the front desk.'
     }
+  },
+  {
+    path: 'checkout',
+    component: Checkout,
+    title: 'CourtSide | Checkout'
+  },
+  {
+    path: 'orders',
+    component: OrderLookup,
+    title: 'CourtSide | Find My Order'
   },
   { path: '**', redirectTo: '' }
 ];

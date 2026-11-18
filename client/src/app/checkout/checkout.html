@@ -1,0 +1,166 @@
+<main id="main" tabindex="-1" class="wide">
+  <h2>Checkout</h2>
+
+  @if (confirmation(); as done) {
+
+    <section class="confirmation">
+      <h2 #confirmTitle tabindex="-1">Thanks for your order, {{ done.firstName }}!</h2>
+      <p>Order number: <strong>{{ done.orderNumber }}</strong></p>
+
+      @if (done.lessons.length > 0) {
+        <p>Your lessons:</p>
+        <ul class="confirm-list">
+          @for (lesson of done.lessons; track $index) {
+            <li>{{ lesson }}</li>
+          }
+        </ul>
+      }
+
+      <p>Total: <strong>{{ done.total | currency }}</strong> (includes {{ done.tax | currency }} tax)</p>
+
+      <h3>What happens next</h3>
+      <ul class="confirm-list">
+        @if (done.lessons.length > 0) {
+          <li>Your lesson time is reserved. Please check in at the CourtSide front desk a few minutes before it starts.</li>
+        }
+        @if (done.fulfillmentText) {
+          <li>{{ done.fulfillmentText }}</li>
+        }
+        <li>Keep your order number. You can look this order up any time with the email you used on the <a routerLink="/orders">Find My Order</a> page.</li>
+      </ul>
+
+      <p>This was a prototype order. Nothing was charged, and your card details were not saved.</p>
+      <p><a routerLink="/">Back to the homepage</a></p>
+    </section>
+
+  } @else {
+
+    <p class="prototype-banner">
+      This is a class prototype, not a real store. Do not enter a real credit card number.
+      Your name, email, and order details are saved for this class project. Card details are never saved or sent, and no payment is taken.
+      Use the "Fill in test card" button in the payment section.
+    </p>
+
+    @if (cart.items().length === 0) {
+      <div>
+        <p>Your cart is empty. <a routerLink="/lessons">Book a lesson</a>, or visit the <a routerLink="/snacks">Snack Shop</a>, <a routerLink="/proshop">Pro Shop</a>, or <a routerLink="/services">Services</a> to add something.</p>
+      </div>
+    } @else {
+
+      <div class="checkout-layout">
+
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+          @if (summary().length > 0) {
+            <div #errorSummaryBox class="error-summary" role="group" aria-labelledby="errorSummaryTitle" tabindex="-1">
+              <h3 id="errorSummaryTitle">
+                {{ summary().length === 1 ? '1 problem to fix before you can place your order:' : summary().length + ' problems to fix before you can place your order:' }}
+              </h3>
+              <ul>
+                @for (entry of summary(); track entry.id) {
+                  <li><a [href]="'#' + entry.id" (click)="goToField($event, entry.id)">{{ entry.message }}</a></li>
+                }
+              </ul>
+            </div>
+          }
+
+          <section class="form-section">
+            <h3>Your details</h3>
+            <p>No account needed.</p>
+
+            <label for="checkoutName">Full name</label>
+            <input type="text" id="checkoutName" formControlName="name" placeholder="John Doe" autocomplete="name"
+              [class.invalid]="errorFor('name')" [attr.aria-invalid]="errorFor('name') ? 'true' : 'false'" aria-describedby="checkoutNameError">
+            <p class="error-text" id="checkoutNameError" [attr.aria-live]="quietErrors() ? 'off' : 'polite'">{{ errorFor('name') }}</p>
+
+            <label for="checkoutEmail">Email</label>
+            <input type="email" id="checkoutEmail" formControlName="email" placeholder="johndoe@example.com" autocomplete="email"
+              [class.invalid]="errorFor('email')" [attr.aria-invalid]="errorFor('email') ? 'true' : 'false'" aria-describedby="checkoutEmailError">
+            <p class="error-text" id="checkoutEmailError" [attr.aria-live]="quietErrors() ? 'off' : 'polite'">{{ errorFor('email') }}</p>
+          </section>
+
+          @if (cart.hasPhysicalItems()) {
+            <section class="form-section">
+              <fieldset class="plain-fieldset">
+                <legend>Pickup or court delivery</legend>
+                <label class="radio-option" for="fulfillPickup">
+                  <input type="radio" id="fulfillPickup" formControlName="fulfillment" value="pickup">
+                  <span>Pick up at the CourtSide front desk</span>
+                </label>
+                <label class="radio-option" for="fulfillCourt">
+                  <input type="radio" id="fulfillCourt" formControlName="fulfillment" value="court">
+                  <span>Deliver to my court</span>
+                </label>
+
+                @if (fulfillment() === 'court') {
+                  <div>
+                    <label for="courtNumber">Court number</label>
+                    <input type="text" id="courtNumber" formControlName="courtNumber" placeholder="e.g. 4"
+                      [class.invalid]="errorFor('courtNumber')" [attr.aria-invalid]="errorFor('courtNumber') ? 'true' : 'false'" aria-describedby="courtNumberError">
+                    <p class="error-text" id="courtNumberError" [attr.aria-live]="quietErrors() ? 'off' : 'polite'">{{ errorFor('courtNumber') }}</p>
+                  </div>
+                }
+              </fieldset>
+            </section>
+          }
+
+          <section class="form-section">
+            <h3>Payment</h3>
+            <p>Test mode only. No real card, no real charge.</p>
+
+            <label for="cardNumber">Card number</label>
+            <input type="text" id="cardNumber" formControlName="cardNumber" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000"
+              (input)="formatCardNumber()"
+              [class.invalid]="errorFor('cardNumber')" [attr.aria-invalid]="errorFor('cardNumber') ? 'true' : 'false'" aria-describedby="cardNumberError">
+            <p class="error-text" id="cardNumberError" [attr.aria-live]="quietErrors() ? 'off' : 'polite'">{{ errorFor('cardNumber') }}</p>
+
+            <div class="card-row">
+              <div>
+                <label for="cardExpiry">Expiry (MM/YY)</label>
+                <input type="text" id="cardExpiry" formControlName="cardExpiry" inputmode="numeric" autocomplete="off" placeholder="MM/YY"
+                  (input)="formatExpiry()"
+                  [class.invalid]="errorFor('cardExpiry')" [attr.aria-invalid]="errorFor('cardExpiry') ? 'true' : 'false'" aria-describedby="cardExpiryError">
+                <p class="error-text" id="cardExpiryError" [attr.aria-live]="quietErrors() ? 'off' : 'polite'">{{ errorFor('cardExpiry') }}</p>
+              </div>
+              <div>
+                <label for="cardCvc">Security code</label>
+                <input type="text" id="cardCvc" formControlName="cardCvc" inputmode="numeric" autocomplete="off" placeholder="123"
+                  (input)="formatCvc()"
+                  [class.invalid]="errorFor('cardCvc')" [attr.aria-invalid]="errorFor('cardCvc') ? 'true' : 'false'" aria-describedby="cardCvcError">
+                <p class="error-text" id="cardCvcError" [attr.aria-live]="quietErrors() ? 'off' : 'polite'">{{ errorFor('cardCvc') }}</p>
+              </div>
+            </div>
+
+            <button type="button" class="test-card-btn" (click)="fillTestCard()">Fill in test card</button>
+
+            <div class="trust-badge-placeholder">[ Trust badge placeholder: a real security or payment-provider badge would go here ]</div>
+          </section>
+
+          <p class="cart-total">Total: {{ cart.total() | currency }} (includes {{ taxText }} tax)</p>
+          <button type="submit" id="placeOrderBtn" [disabled]="placing()">Place order (prototype)</button>
+        </form>
+
+        <aside class="order-summary">
+          <h3>Order summary</h3>
+          <div>
+            @for (item of cart.items(); track $index) {
+              <div class="summary-line">
+                <span class="summary-item">
+                  <span class="item-thumb item-thumb-placeholder" aria-hidden="true">{{ initials(item.name) }}</span>
+                  <span>{{ item.quantity }} &times; {{ item.name }}@if (item.options) {<small>{{ item.options }}</small>}</span>
+                </span>
+                <span>{{ item.price * item.quantity | currency }}</span>
+              </div>
+            }
+          </div>
+          <div class="totals">
+            <p class="totals-line"><span>Subtotal</span><span>{{ cart.subtotal() | currency }}</span></p>
+            <p class="totals-line"><span>Tax ({{ taxText }})</span><span>{{ cart.tax() | currency }}</span></p>
+          </div>
+          <p class="cart-total">Total: {{ cart.total() | currency }}</p>
+        </aside>
+
+      </div>
+    }
+  }
+</main>
