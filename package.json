@@ -1,11 +1,17 @@
 {
   "name": "courtside",
   "version": "1.0.0",
-  "description": "",
-  "main": "cart.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+"description": "CourtSide: tennis lesson booking and e-commerce web app (MEAN stack: MongoDB, Express, Angular, Node.js)",
+"main": "server.js",
+"engines": {
+  "node": ">=22.22.3"
+},
+"scripts": {
+  "postinstall": "npm --prefix client install",
+  "build": "npm --prefix client run build",
+  "start": "node server.js",
+  "dev:client": "npm --prefix client start"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/OCaptainMyCaptain1/courtside.git"

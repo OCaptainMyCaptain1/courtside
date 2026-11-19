@@ -9,8 +9,12 @@ const lessonRules = require('./lesson-rules');
 const { hashPassword, verifyPassword, burnTime, signToken, readToken } = require('./auth');
 
 const app = express();
-app.use(express.json());
-app.use(express.static(__dirname));
+app.disable('x-powered-by');                 // don't advertise which framework we use
+app.use(express.json({ limit: '100kb' }));   // refuse oversized request bodies
+
+// The website itself: the Angular app, built by "npm run build" into client/dist
+const CLIENT_DIST = path.join(__dirname, 'client', 'dist', 'client', 'browser');
+app.use(express.static(CLIENT_DIST));
 
 // Falls back to a local MongoDB if no .env is provided
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/courtside';
@@ -450,6 +454,25 @@ app.get('/api/orders/lookup', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Could not look up that order.' });
   }
+});
+
+// ---------- Everything else ----------
+
+// An /api address that doesn't exist
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'Not found.' });
+});
+
+// Any other page address (like /lessons) gets the Angular app, which then shows the right page.
+// This is what lets a customer refresh the page, or open a link directly, without an error.
+app.use((req, res, next) => {
+  if (req.method !== 'GET') return next();
+
+  const indexFile = path.join(CLIENT_DIST, 'index.html');
+  if (!fs.existsSync(indexFile)) {
+    return res.status(503).send('The website has not been built yet. Stop the server, run "npm run build", then run "npm start".');
+  }
+  res.sendFile(indexFile);
 });
 
 app.listen(PORT, () => console.log('Running at http://localhost:' + PORT));
