@@ -1,4 +1,5 @@
 <main id="main" tabindex="-1">
+  <section class="account-form">
   <h2>Find My Order</h2>
   <p>Enter your order number and the email you used when you ordered. No account needed.</p>
 
@@ -13,8 +14,9 @@
       <p class="error-text" role="alert">{{ errorMessage() }}</p>
     }
 
-    <button type="submit" [disabled]="loading()">{{ loading() ? 'Looking...' : 'Find order' }}</button>
+    <button type="submit" class="primary-btn" [disabled]="loading()">{{ loading() ? 'Looking...' : 'Find order' }}</button>
   </form>
+  </section>
 
   @if (order(); as found) {
     <section class="confirmation" aria-live="polite">

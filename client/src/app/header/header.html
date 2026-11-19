@@ -7,7 +7,11 @@
     <a routerLink="/snacks" routerLinkActive ariaCurrentWhenActive="page">Snack Shop</a>
     <a routerLink="/proshop" routerLinkActive ariaCurrentWhenActive="page">Pro Shop</a>
     <a routerLink="/services" routerLinkActive ariaCurrentWhenActive="page">Services</a>
-    <a routerLink="/orders" routerLinkActive ariaCurrentWhenActive="page">Find My Order</a>
+    @if (auth.isLoggedIn()) {
+      <a routerLink="/account" routerLinkActive ariaCurrentWhenActive="page">My Account</a>
+    } @else {
+      <a routerLink="/login" routerLinkActive ariaCurrentWhenActive="page">Sign in</a>
+    }
     <!-- The Cart link opens a panel, so tell assistive technology it behaves like a button -->
     <a href="#" id="cartLink" role="button" aria-haspopup="dialog" (click)="openCart($event)" (keydown.space)="openCart($event)">Cart (<span class="cart-count">{{ cart.count() }}</span>)</a>
   </nav>

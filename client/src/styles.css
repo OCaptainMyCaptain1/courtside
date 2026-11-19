@@ -582,9 +582,20 @@ nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 
 .summary-item .item-thumb { width: 48px; height: 48px; font-size: 0.9rem; }
 
 /* Angular wraps each piece of the page in a custom element; make them behave like plain blocks */
-app-header, app-footer, app-home, app-shop, app-cart-drawer, app-toast, app-checkout, app-order-lookup, app-lessons, app-reviews { display: block; }
+app-header, app-footer, app-home, app-shop, app-cart-drawer, app-toast, app-checkout, app-order-lookup, app-lessons, app-reviews, app-auth-page, app-account { display: block; }
 
 /* Angular removes the spaces between the links, so lay the nav out as a wrapping row.
    Links wrap onto a new line between labels, never inside one. */
 header nav { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; }
 header nav a { margin-left: 0; white-space: nowrap; }
+
+/* Simple forms: Find My Order, sign in, create account, and the account page */
+.account-form { background: #fff; border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+.account-form h2 { font-size: 1.6rem; margin-bottom: 8px; }
+.account-form label { display: block; font-weight: 600; margin-top: 16px; margin-bottom: 6px; }
+.account-form input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; font-family: inherit; }
+.primary-btn { background: #7c4dff; color: #fff; border: none; padding: 14px 28px; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 20px; min-height: 44px; }
+.primary-btn:hover { background: #5e35d1; }
+.primary-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.secondary-btn { background: #fff; color: #5e35d1; border: 1px solid #7c4dff; padding: 10px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; min-height: 44px; margin-top: 12px; }
+.secondary-btn:hover { background: #7c4dff; color: #fff; }

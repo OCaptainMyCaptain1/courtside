@@ -1,4 +1,7 @@
 import { Routes } from '@angular/router';
+import { Account } from './account/account';
+import { authGuard } from './auth-guard';
+import { AuthPage } from './auth-page/auth-page';
 import { Checkout } from './checkout/checkout';
 import { Home } from './home/home';
 import { Lessons } from './lessons/lessons';
@@ -62,6 +65,24 @@ export const routes: Routes = [
     path: 'orders',
     component: OrderLookup,
     title: 'CourtSide | Find My Order'
+  },
+  {
+    path: 'login',
+    component: AuthPage,
+    title: 'CourtSide | Sign in',
+    data: { mode: 'login' }
+  },
+  {
+    path: 'register',
+    component: AuthPage,
+    title: 'CourtSide | Create an account',
+    data: { mode: 'register' }
+  },
+  {
+    path: 'account',
+    component: Account,
+    canActivate: [authGuard],
+    title: 'CourtSide | My Account'
   },
   { path: '**', redirectTo: '' }
 ];

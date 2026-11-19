@@ -1,0 +1,38 @@
+<main id="main" tabindex="-1">
+  <section class="account-form">
+    <h2>My Account</h2>
+
+    @if (auth.user(); as user) {
+      <p>Signed in as <strong>{{ user.name }}</strong> ({{ user.email }})</p>
+    }
+    <button type="button" class="secondary-btn" (click)="signOut()">Sign out</button>
+  </section>
+
+  <section class="account-form">
+    <h2>My orders</h2>
+
+    @if (loading()) {
+      <p role="status">Loading...</p>
+    } @else if (errorMessage()) {
+      <p class="error-text" role="alert">{{ errorMessage() }}</p>
+    } @else if (orders().length === 0) {
+      <p>You haven't placed an order with this account yet. <a routerLink="/lessons">Book a lesson</a> or visit the <a routerLink="/snacks">Snack Shop</a>, <a routerLink="/proshop">Pro Shop</a>, or <a routerLink="/services">Services</a>.</p>
+    } @else {
+      @for (order of orders(); track order.orderNumber) {
+        <article class="order-card">
+          <h3>Order {{ order.orderNumber }}</h3>
+          <p class="order-meta">Placed {{ order.createdAt | date: 'medium' }} &middot; {{ fulfillmentText(order) }}</p>
+
+          @for (item of order.items; track $index) {
+            <div class="summary-line">
+              <span>{{ item.quantity }} &times; {{ item.name }}@if (item.options) {<small>{{ item.options }}</small>}</span>
+              <span>{{ item.price * item.quantity | currency }}</span>
+            </div>
+          }
+
+          <p class="cart-total">Total: {{ order.total | currency }}</p>
+        </article>
+      }
+    }
+  </section>
+</main>

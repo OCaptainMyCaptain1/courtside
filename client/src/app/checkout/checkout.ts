@@ -3,6 +3,7 @@ import { afterNextRender, Component, effect, ElementRef, inject, Injector, signa
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../auth-service';
 import { CartService, TAX_PERCENT_TEXT } from '../cart-service';
 import { OrderResult } from '../order';
 import { OrderService } from '../order-service';
@@ -77,6 +78,7 @@ interface Confirmation {
 })
 export class Checkout {
   protected cart = inject(CartService);
+  protected auth = inject(AuthService);
   private orders = inject(OrderService);
   private injector = inject(Injector);
 
@@ -116,6 +118,10 @@ export class Checkout {
   private confirmTitle = viewChild<ElementRef<HTMLElement>>('confirmTitle');
 
   constructor() {
+    // A signed-in customer doesn't have to retype their details (they can still change them)
+    const signedIn = this.auth.user();
+    if (signedIn) this.form.patchValue({ name: signedIn.name, email: signedIn.email });
+
     // When the cart changes (for example a lesson-only order), keep the delivery choice and its validation in step
     effect(() => {
       const needsFulfillment = this.cart.hasPhysicalItems();

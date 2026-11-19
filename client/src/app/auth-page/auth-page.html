@@ -1,0 +1,43 @@
+<main id="main" tabindex="-1">
+  <section class="account-form">
+    <h2>{{ isRegister ? 'Create an account' : 'Sign in' }}</h2>
+
+    @if (isRegister) {
+      <p>An account saves your details for faster checkout and keeps your order history in one place. You can still check out as a guest at any time.</p>
+    } @else {
+      <p>Sign in to see your orders and check out faster. You can still check out as a guest at any time.</p>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      @if (isRegister) {
+        <label for="accountName">Full name</label>
+        <input type="text" id="accountName" formControlName="name" placeholder="John Doe" autocomplete="name">
+      }
+
+      <label for="accountEmail">Email</label>
+      <input type="email" id="accountEmail" formControlName="email" placeholder="johndoe@example.com" autocomplete="email">
+
+      <label for="accountPassword">Password</label>
+      <input type="password" id="accountPassword" formControlName="password" [attr.autocomplete]="isRegister ? 'new-password' : 'current-password'" aria-describedby="passwordHint">
+      @if (isRegister) {
+        <p id="passwordHint" class="field-hint">At least 8 characters. This is a class prototype, so please don't reuse a password from another site.</p>
+      } @else {
+        <span id="passwordHint"></span>
+      }
+
+      <p class="error-text" role="alert">{{ message() }}</p>
+
+      <button type="submit" class="primary-btn" [disabled]="busy()">
+        {{ busy() ? 'Please wait...' : (isRegister ? 'Create account' : 'Sign in') }}
+      </button>
+    </form>
+
+    <p class="switch-link">
+      @if (isRegister) {
+        Already have an account? <a routerLink="/login" [queryParams]="returnUrl ? { returnUrl: returnUrl } : {}">Sign in</a>
+      } @else {
+        New here? <a routerLink="/register" [queryParams]="returnUrl ? { returnUrl: returnUrl } : {}">Create an account</a>
+      }
+    </p>
+  </section>
+</main>

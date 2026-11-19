@@ -6,6 +6,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { priceOrder, OrderError } = require('./order-pricing');
 const lessonRules = require('./lesson-rules');
+const { hashPassword, verifyPassword, burnTime, signToken, readToken } = require('./auth');
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,13 @@ app.use(express.static(__dirname));
 // Falls back to a local MongoDB if no .env is provided
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/courtside';
 const PORT = process.env.PORT || 3000;
+
+// The secret that signs login tokens. If none is set in .env, make a random one;
+// everyone is then signed out whenever the server restarts.
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
+if (!process.env.JWT_SECRET) {
+  console.warn('JWT_SECRET is not set in .env, so logins will end when the server restarts.');
+}
 
 // ---------- Models ----------
 
@@ -31,6 +39,15 @@ const productSchema = new mongoose.Schema({
   inStock: { type: Boolean, default: true }
 });
 const Product = mongoose.model('Product', productSchema);
+
+// A customer account. Only a hash of the password is stored, never the password itself.
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true, maxlength: 60 },
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  passwordHash: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now }
+});
+const User = mongoose.model('User', userSchema);
 
 const coachSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -61,6 +78,7 @@ const Review = mongoose.model('Review', reviewSchema);
 
 const orderSchema = new mongoose.Schema({
   orderNumber: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },   // empty for guest orders
   customerName: { type: String, required: true, trim: true },
   email: { type: String, required: true, trim: true, lowercase: true },
   fulfillment: String,
@@ -164,6 +182,103 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+// ---------- Accounts ----------
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// What the browser is allowed to know about a user (never the password hash)
+function publicUser(user) {
+  return { id: String(user._id), name: user.name, email: user.email };
+}
+
+// Returns the id of the signed-in user, or null for a guest
+function signedInUserId(req) {
+  const header = req.get('Authorization') || '';
+  return readToken(header.startsWith('Bearer ') ? header.slice(7) : '', JWT_SECRET);
+}
+
+// Routes that need a signed-in user use this: it stops the request if nobody is signed in
+function requireAuth(req, res, next) {
+  const userId = signedInUserId(req);
+  if (!userId) return res.status(401).json({ error: 'Please sign in.' });
+  req.userId = userId;
+  next();
+}
+
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const b = req.body || {};
+    const name = String(b.name || '').trim();
+    const email = String(b.email || '').trim().toLowerCase();
+    const password = String(b.password || '');
+
+    if (name.length < 2 || name.length > 60) return res.status(400).json({ error: 'Enter your full name.' });
+    if (!EMAIL_PATTERN.test(email) || email.length > 254) return res.status(400).json({ error: 'Enter a valid email address.' });
+    if (password.length < 8 || password.length > 100) {
+      return res.status(400).json({ error: 'Passwords must be 8 to 100 characters long.' });
+    }
+
+    const passwordHash = await hashPassword(password);
+
+    let user;
+    try {
+      user = await User.create({ name: name, email: email, passwordHash: passwordHash });
+    } catch (err) {
+      if (err && err.code === 11000) {
+        return res.status(409).json({ error: 'An account with that email already exists. Try signing in instead.' });
+      }
+      throw err;
+    }
+
+    res.status(201).json({ token: signToken(user._id, JWT_SECRET), user: publicUser(user) });
+  } catch (err) {
+    console.error('Register failed:', err);
+    res.status(500).json({ error: 'We could not create your account. Please try again.' });
+  }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const b = req.body || {};
+    const email = String(b.email || '').trim().toLowerCase();
+    const password = String(b.password || '');
+
+    const user = email && password.length <= 100 ? await User.findOne({ email: email }) : null;
+
+    let matches = false;
+    if (user) matches = await verifyPassword(password, user.passwordHash);
+    else await burnTime(password.slice(0, 100));   // unknown email: take the same time as a real check
+
+    // The same message for a wrong email and a wrong password, so it does not reveal which accounts exist
+    if (!matches) return res.status(401).json({ error: 'Incorrect email or password.' });
+
+    res.json({ token: signToken(user._id, JWT_SECRET), user: publicUser(user) });
+  } catch (err) {
+    console.error('Login failed:', err);
+    res.status(500).json({ error: 'We could not sign you in. Please try again.' });
+  }
+});
+
+// Who is signed in? (The browser calls this on page load to check its saved token is still good.)
+app.get('/api/auth/me', requireAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).lean();
+    if (!user) return res.status(401).json({ error: 'Please sign in.' });
+    res.json(publicUser(user));
+  } catch (err) {
+    res.status(401).json({ error: 'Please sign in.' });
+  }
+});
+
+// The signed-in user's own orders, newest first
+app.get('/api/orders/mine', requireAuth, async (req, res) => {
+  try {
+    res.json(await Order.find({ userId: req.userId }).sort({ createdAt: -1 }).limit(100).lean());
+  } catch (err) {
+    res.status(500).json({ error: 'Could not load your orders.' });
+  }
+});
+
 // ---------- Reviews ----------
 
 // All reviews, oldest first (so new ones appear at the bottom of the list)
@@ -236,8 +351,6 @@ app.get('/api/lessons/availability', async (req, res) => {
 
 // ---------- Orders ----------
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 // Order numbers look like CS-48213. Try again if one is already taken.
 async function newOrderNumber() {
   for (let attempt = 0; attempt < 10; attempt++) {
@@ -290,6 +403,7 @@ app.post('/api/orders', async (req, res) => {
     try {
       await Order.create({
         orderNumber: orderNumber,
+        userId: signedInUserId(req) || undefined,   // signed-in customers get the order saved to their account
         customerName: customerName,
         email: email,
         fulfillment: b.fulfillment,

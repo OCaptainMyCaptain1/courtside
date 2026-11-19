@@ -26,7 +26,11 @@
         @if (done.fulfillmentText) {
           <li>{{ done.fulfillmentText }}</li>
         }
-        <li>Keep your order number. You can look this order up any time with the email you used on the <a routerLink="/orders">Find My Order</a> page.</li>
+        @if (auth.isLoggedIn()) {
+          <li>This order was saved to your account. You can find it any time under <a routerLink="/account">My Account</a>.</li>
+        } @else {
+          <li>Keep your order number. You can look this order up any time with the email you used on the <a routerLink="/orders">Find My Order</a> page.</li>
+        }
       </ul>
 
       <p>This was a prototype order. Nothing was charged, and your card details were not saved.</p>
@@ -66,7 +70,11 @@
 
           <section class="form-section">
             <h3>Your details</h3>
-            <p>No account needed.</p>
+            @if (auth.isLoggedIn()) {
+              <p>Signed in as <strong>{{ auth.user()?.email }}</strong>. This order will be saved to your account.</p>
+            } @else {
+              <p>No account needed. <a routerLink="/login" [queryParams]="{ returnUrl: '/checkout' }">Sign in</a> or <a routerLink="/register" [queryParams]="{ returnUrl: '/checkout' }">create an account</a> to save your orders.</p>
+            }
 
             <label for="checkoutName">Full name</label>
             <input type="text" id="checkoutName" formControlName="name" placeholder="John Doe" autocomplete="name"
