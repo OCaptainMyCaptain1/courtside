@@ -582,7 +582,7 @@ nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 
 .summary-item .item-thumb { width: 48px; height: 48px; font-size: 0.9rem; }
 
 /* Angular wraps each piece of the page in a custom element; make them behave like plain blocks */
-app-header, app-footer, app-home, app-shop, app-cart-drawer, app-toast, app-checkout, app-order-lookup, app-lessons { display: block; }
+app-header, app-footer, app-home, app-shop, app-cart-drawer, app-toast, app-checkout, app-order-lookup, app-lessons, app-reviews { display: block; }
 
 /* Angular removes the spaces between the links, so lay the nav out as a wrapping row.
    Links wrap onto a new line between labels, never inside one. */

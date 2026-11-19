@@ -51,6 +51,14 @@ const bookingSchema = new mongoose.Schema({
 bookingSchema.index({ coach: 1, date: 1, time: 1 }, { unique: true });
 const Booking = mongoose.model('Booking', bookingSchema);
 
+const reviewSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true, maxlength: 60 },
+  rating: { type: Number, required: true, min: 1, max: 5 },
+  comment: { type: String, required: true, trim: true, maxlength: 300 },
+  createdAt: { type: Date, default: Date.now }
+});
+const Review = mongoose.model('Review', reviewSchema);
+
 const orderSchema = new mongoose.Schema({
   orderNumber: String,
   customerName: { type: String, required: true, trim: true },
@@ -111,12 +119,32 @@ async function seedCoaches() {
   console.log('Coaches ready (' + coaches.length + ')');
 }
 
+// The two starter reviews (data/reviews.json). $setOnInsert means a review is only added
+// if it is missing, so nothing a customer wrote is ever overwritten.
+async function seedReviews() {
+  const file = path.join(__dirname, 'data', 'reviews.json');
+  const reviews = JSON.parse(fs.readFileSync(file, 'utf8'));
+
+  await Review.bulkWrite(reviews.map(function (review) {
+    return {
+      updateOne: {
+        filter: { name: review.name, comment: review.comment },
+        update: { $setOnInsert: review },
+        upsert: true
+      }
+    };
+  }));
+
+  console.log('Reviews ready');
+}
+
 mongoose.connect(MONGODB_URI)
   .then(function () {
     console.log('Connected to MongoDB');
     return seedProducts();
   })
   .then(seedCoaches)
+  .then(seedReviews)
   .then(function () {
     return Booking.init();   // makes sure the unique booking index exists before orders arrive
   })
@@ -133,6 +161,41 @@ app.get('/api/products', async (req, res) => {
     res.json(await Product.find(filter).sort({ _id: 1 }).lean());
   } catch (err) {
     res.status(500).json({ error: 'Could not load products.' });
+  }
+});
+
+// ---------- Reviews ----------
+
+// All reviews, oldest first (so new ones appear at the bottom of the list)
+app.get('/api/reviews', async (req, res) => {
+  try {
+    res.json(await Review.find().sort({ createdAt: 1 }).limit(200).lean());
+  } catch (err) {
+    res.status(500).json({ error: 'Could not load reviews.' });
+  }
+});
+
+// Save a new review after checking it
+app.post('/api/reviews', async (req, res) => {
+  try {
+    const b = req.body || {};
+    const name = String(b.name || '').trim();
+    const comment = String(b.comment || '').trim();
+    const rating = Number(b.rating);
+
+    if (name === '') return res.status(400).json({ error: 'Please enter your name.' });
+    if (name.length > 60) return res.status(400).json({ error: 'Names can be up to 60 characters.' });
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+      return res.status(400).json({ error: 'Please enter a rating from 1 to 5.' });
+    }
+    if (comment === '') return res.status(400).json({ error: 'Please write a comment.' });
+    if (comment.length > 300) return res.status(400).json({ error: 'Comments can be up to 300 characters.' });
+
+    const review = await Review.create({ name: name, rating: rating, comment: comment });
+    res.status(201).json(review);
+  } catch (err) {
+    console.error('Review failed:', err);
+    res.status(500).json({ error: 'We could not save your review. Please try again.' });
   }
 });
 

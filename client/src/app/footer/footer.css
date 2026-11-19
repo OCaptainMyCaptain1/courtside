@@ -1,0 +1,31 @@
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto 20px;
+  text-align: left;
+}
+
+.footer-grid h2 {
+  font-size: 1rem;
+  margin: 0 0 8px;
+  color: #ffffff;
+}
+
+.footer-grid p {
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.footer-grid a,
+.footer-note + p a {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-note {
+  font-size: 0.85rem;
+  color: #c9cde0;
+  margin: 0 0 12px;
+}

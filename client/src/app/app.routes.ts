@@ -3,6 +3,7 @@ import { Checkout } from './checkout/checkout';
 import { Home } from './home/home';
 import { Lessons } from './lessons/lessons';
 import { OrderLookup } from './order-lookup/order-lookup';
+import { Reviews } from './reviews/reviews';
 import { Shop } from './shop/shop';
 
 export const routes: Routes = [
@@ -15,6 +16,11 @@ export const routes: Routes = [
     path: 'lessons',
     component: Lessons,
     title: 'CourtSide | Book a Lesson'
+  },
+  {
+    path: 'reviews',
+    component: Reviews,
+    title: 'CourtSide | Customer Reviews'
   },
   {
     path: 'snacks',

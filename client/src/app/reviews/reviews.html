@@ -1,0 +1,42 @@
+<main id="main" tabindex="-1">
+  <section class="reviews">
+    <h2>Customer Reviews</h2>
+
+    @if (loading()) {
+      <p role="status">Loading...</p>
+    } @else if (loadError()) {
+      <p class="error-text" role="alert">{{ loadError() }}</p>
+    } @else {
+      @if (reviews().length > 0) {
+        <p class="price-note">Average rating: {{ average() }} out of 5 from {{ reviews().length }} {{ reviews().length === 1 ? 'review' : 'reviews' }}</p>
+      }
+
+      @for (review of reviews(); track review._id) {
+        <!-- Angular escapes the text, so a typed "<b>" shows up as plain text and is never treated as HTML -->
+        <article class="review" tabindex="-1" [id]="'review-' + review._id">
+          <p class="reviewer">{{ review.name }}</p>
+          <p class="rating">Rating: {{ review.rating }}/5</p>
+          <p>{{ review.comment }}</p>
+        </article>
+      }
+    }
+  </section>
+
+  <section class="feedback-form">
+    <h2>Leave a Review</h2>
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <label for="nameInput">Name:</label>
+      <input type="text" id="nameInput" formControlName="name" placeholder="John Doe" maxlength="60">
+
+      <label for="ratingInput">Rating (1-5):</label>
+      <input type="number" id="ratingInput" formControlName="rating" min="1" max="5" placeholder="5">
+
+      <label for="commentInput">Comment:</label>
+      <textarea id="commentInput" formControlName="comment" [attr.maxlength]="maxLength" placeholder="Tell us about your lesson, coach, or purchase"></textarea>
+      <p id="charCount" class="char-count">{{ commentLength() }} / {{ maxLength }}</p>
+
+      <button type="submit" [disabled]="saving()">{{ saving() ? 'Saving...' : 'Submit Review' }}</button>
+      <p id="feedbackMessage" role="alert">{{ message() }}</p>
+    </form>
+  </section>
+</main>
