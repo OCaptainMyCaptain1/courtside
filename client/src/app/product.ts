@@ -19,4 +19,8 @@ export interface Product {
   options: ProductOption[];
   hasTension: boolean;          // true if the customer types a string tension
   inStock: boolean;
+  image: string | null;          // e.g. "images/products/sports-drink.jpg", or null if there is no photo yet
+  imageAlt: string | null;       // describes the photo for screen reader users
+  imageCredit: string | null;    // e.g. "Photo by Jane Doe on Unsplash"
+  imageCreditUrl: string | null; // link to the photo's page
 }

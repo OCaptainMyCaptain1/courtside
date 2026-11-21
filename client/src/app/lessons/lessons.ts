@@ -201,7 +201,7 @@ export class Lessons {
     const time = this.time();
     const options = coach + ', ' + formatLessonDate(date) + ', ' + time;
 
-    const result = this.cart.addLesson(info.name, info.price, options, coach, date, time);
+    const result = this.cart.addLesson(info.name, info.price, options, coach, date, time, 'images/lesson.jpg');
 
     if (result === 'duplicate') {
       this.bookingMessage.set('That lesson is already in your cart.');

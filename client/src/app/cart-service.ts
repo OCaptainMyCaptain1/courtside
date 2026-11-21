@@ -19,6 +19,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   options: string;
+  image?: string;    // thumbnail shown in the cart and checkout
   type?: 'lesson';   // lessons are one-per-slot and never stack
   coach?: string;
   date?: string;
@@ -71,21 +72,21 @@ export class CartService {
   }
 
   // Add an item, or increase its quantity if the same name AND options are already there
-  add(name: string, price: number, options: string): void {
+  add(name: string, price: number, options: string, image?: string | null): void {
     const items = this.items().map((item) => ({ ...item }));
     const existing = items.find((item) => item.name === name && item.options === options);
 
     if (existing) {
       existing.quantity += 1;
     } else {
-      items.push({ name, price, quantity: 1, options });
+      items.push({ name, price, quantity: 1, options, image: image ?? undefined });
     }
     this.save(items);
   }
 
   // Add a private lesson. Returns "added", "duplicate" (same coach, date, and time),
   // or "conflict" (a different coach at the same date and time).
-  addLesson(name: string, price: number, options: string, coach: string, date: string, time: string): 'added' | 'duplicate' | 'conflict' {
+  addLesson(name: string, price: number, options: string, coach: string, date: string, time: string, image?: string): 'added' | 'duplicate' | 'conflict' {
     const items = this.items();
 
     for (const item of items) {
@@ -94,7 +95,7 @@ export class CartService {
       if (item.date === date && item.time === time) return 'conflict';
     }
 
-    this.save([...items, { name, price, quantity: 1, options, type: 'lesson', coach, date, time }]);
+    this.save([...items, { name, price, quantity: 1, options, image, type: 'lesson', coach, date, time }]);
     return 'added';
   }
 

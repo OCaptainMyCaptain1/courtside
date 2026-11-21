@@ -122,7 +122,7 @@ export class ProductCard {
     const options = parts.join(', ');
 
     // 3. Add it and confirm
-    this.cart.add(product.name, this.itemPrice(), options);
+    this.cart.add(product.name, this.itemPrice(), options, product.image);
     this.toast.show(product.name + (options ? ' (' + options + ')' : '') + ' added to your cart.', {
       actionLabel: 'View cart',
       onAction: (opener) => this.cart.open(opener)

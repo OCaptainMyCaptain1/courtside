@@ -1,12 +1,25 @@
 <figure class="product-photo">
-  <div class="photo-placeholder" aria-hidden="true">
-    <span class="photo-placeholder-initials">{{ initials(product().name) }}</span>
-    <span class="photo-placeholder-label">Photo coming soon</span>
-  </div>
-  <figcaption class="photo-credit">
-    Photo by <span class="credit-blank">&nbsp;</span> on
-    <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>
-  </figcaption>
+  @if (product().image) {
+    <img [src]="product().image" [alt]="product().imageAlt ?? ''" width="800" height="600" loading="lazy">
+    @if (product().imageCredit) {
+      <figcaption class="photo-credit">
+        @if (product().imageCreditUrl) {
+          <a [href]="product().imageCreditUrl" target="_blank" rel="noopener">{{ product().imageCredit }}</a>
+        } @else {
+          {{ product().imageCredit }}
+        }
+      </figcaption>
+    }
+  } @else {
+    <div class="photo-placeholder" aria-hidden="true">
+      <span class="photo-placeholder-initials">{{ initials(product().name) }}</span>
+      <span class="photo-placeholder-label">Photo coming soon</span>
+    </div>
+    <figcaption class="photo-credit">
+      Photo by <span class="credit-blank">&nbsp;</span> on
+      <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>
+    </figcaption>
+  }
 </figure>
 
 <h3>{{ product().name }}</h3>

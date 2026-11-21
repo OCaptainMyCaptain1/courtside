@@ -40,6 +40,10 @@ const productSchema = new mongoose.Schema({
   optionLabel: String,     // e.g. "Grip Size"
   options: [{ _id: false, value: String, price: Number, days: Number }],
   hasTension: Boolean,     // true if the customer types a string tension (stringing)
+  image: String,           // e.g. "images/products/sports-drink.jpg" (empty until a photo is added)
+  imageAlt: String,        // describes the photo for screen reader users
+  imageCredit: String,     // e.g. "Photo by Jane Doe on Unsplash"
+  imageCreditUrl: String,  // link to the photo's page
   inStock: { type: Boolean, default: true }
 });
 const Product = mongoose.model('Product', productSchema);
@@ -110,7 +114,12 @@ const Order = mongoose.model('Order', orderSchema);
 
 async function seedProducts() {
   const file = path.join(__dirname, 'products', 'products.json');
-  const products = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const publicFolder = path.join(__dirname, 'client', 'public');
+  const products = JSON.parse(fs.readFileSync(file, 'utf8')).map(function (product) {
+    // Only use a photo if its file is really there, so a missing photo never shows as a broken image
+    const hasPhoto = product.image && fs.existsSync(path.join(publicFolder, product.image));
+    return { ...product, image: hasPhoto ? product.image : null };
+  });
 
   // Remove the old optionValues field left on products saved before options had prices
   await Product.collection.updateMany({}, { $unset: { optionValues: '' } });

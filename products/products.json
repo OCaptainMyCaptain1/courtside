@@ -10,7 +10,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/trail-mix.jpg",
+    "imageAlt": "Close-up of a mixed nut and raisin blend",
+    "imageCredit": "Photo by Monaz Hastam on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/a-close-up-view-of-a-mixed-nut-and-raisin-blend-dCcEyzd6e7Q"
   },
   {
     "name": "Sports Drink",
@@ -23,7 +27,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/sports-drink.jpg",
+    "imageAlt": "A row of sports hydration beverages",
+    "imageCredit": "Photo by Shayna Douglas on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/green-and-white-labeled-bottles-7r5jMqhgg00"
   },
   {
     "name": "Protein Bar",
@@ -36,7 +44,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/protein-bar.jpg",
+    "imageAlt": "Two unwrapped granola type protein bars stacked on top of each other",
+    "imageCredit": "Photo by Towfiqu Barbhuiya on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/a-bar-of-granola-sitting-on-top-of-a-table-Y-VDI9vQS3M"
   },
   {
     "name": "Bottled Water",
@@ -49,7 +61,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/bottled-water.jpg",
+    "imageAlt": "Bottle of water",
+    "imageCredit": "Photo by charlesdeluvio on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/clear-plastic-bottle-on-white-table-edBR3b2JAuA"
   },
   {
     "name": "Performance Racquet",
@@ -75,7 +91,11 @@
       }
     ],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/performance-racquet.jpg",
+    "imageAlt": "Tennis racquet resting on a court",
+    "imageCredit": "Photo by Hoi Pham on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/white-and-blue-tennis-racket-eLZwsPO8cCQ"
   },
   {
     "name": "Replacement Grip Tape",
@@ -88,7 +108,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/replacement-grip-tape.jpg",
+    "imageAlt": "Two blue tennis grips, one rolled, one unrolled",
+    "imageCredit": "Photo by NEXT Distro on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/a-roll-of-blue-paper-next-to-a-roll-of-blue-tape-6Fo1ev8CmmI"
   },
   {
     "name": "Tennis Bag",
@@ -101,7 +125,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/tennis-bag.jpg",
+    "imageAlt": "Tennis racquet bag sitting on tennis court",
+    "imageCredit": "Photo by SideSpin Padel on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/a-duffle-bag-sitting-on-top-of-a-tennis-court-FWuRa-0X6G8"
   },
   {
     "name": "Wristbands (2-Pack)",
@@ -114,7 +142,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/wristbands.jpg",
+    "imageAlt": "A person's arm with a sports wristband",
+    "imageCredit": "Photo by Luigi Estuye, LUCREATIVE® on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/a-persons-arm-with-a-wristband-on-it-4w1353S-Drs"
   },
   {
     "name": "Grommet/Headguard Set",
@@ -127,7 +159,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/grommet-headguard-set.jpg",
+    "imageAlt": "Tennis ball bouncing on tennis racquet with view of headguard",
+    "imageCredit": "Photo by Paxton Todd on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/a-person-holding-a-tennis-racket-hitting-a-tennis-ball-yTKmj1ngVy0"
   },
   {
     "name": "Racquet Stringing",
@@ -150,7 +186,11 @@
       }
     ],
     "hasTension": true,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/racquet-stringing.jpg",
+    "imageAlt": "A person stringing a racquet on a stringing machine",
+    "imageCredit": "Photo by Irish83 on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/a-woman-strings-a-badminton-racket-in-a-sports-shop-eZS3RsMaJCc"
   },
   {
     "name": "Grip Installation",
@@ -172,7 +212,11 @@
       }
     ],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/grip-installation.jpg",
+ "imageAlt": "Person wrapping a tennis racquet handle with new grip tape",
+    "imageCredit": "Photo by Julia Kuzenkov on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/woman-fixing-white-tape-on-tennis-rocket-MGJSW4aMkkY"
   },
   {
     "name": "Grommet/Headguard Set Installation",
@@ -185,7 +229,11 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/grommet-headguard-installation.jpg",
+    "imageAlt": "Tennis racquet frame showing the headguard and grommets along the side",
+    "imageCredit": "Photo by Nenyasha Manzvera on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/a-yellow-and-black-bicycle-tire-0nziLKy_bLw"
   },
   {
     "name": "Demo Racquet Rental",
@@ -211,7 +259,11 @@
       }
     ],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": "images/products/demo-racquet-rental.jpg",
+    "imageAlt": "Three tennis racquets with tennis balls laying on tennis court",
+    "imageCredit": "Photo by Ana Garnica on Unsplash",
+    "imageCreditUrl": "https://unsplash.com/photos/two-tennis-rackets-and-two-tennis-balls-on-a-tennis-court-zim2X5r3VSk"
   },
   {
     "name": "Private Lesson (60 min)",
@@ -224,6 +276,10 @@
     "optionLabel": null,
     "options": [],
     "hasTension": false,
-    "inStock": true
+    "inStock": true,
+    "image": null,
+    "imageAlt": null,
+    "imageCredit": null,
+    "imageCreditUrl": null
   }
 ]

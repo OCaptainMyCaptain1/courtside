@@ -154,7 +154,11 @@
             @for (item of cart.items(); track $index) {
               <div class="summary-line">
                 <span class="summary-item">
-                  <span class="item-thumb item-thumb-placeholder" aria-hidden="true">{{ initials(item.name) }}</span>
+                  @if (item.image) {
+                    <img class="item-thumb" [src]="item.image" alt="">
+                  } @else {
+                    <span class="item-thumb item-thumb-placeholder" aria-hidden="true">{{ initials(item.name) }}</span>
+                  }
                   <span>{{ item.quantity }} &times; {{ item.name }}@if (item.options) {<small>{{ item.options }}</small>}</span>
                 </span>
                 <span>{{ item.price * item.quantity | currency }}</span>

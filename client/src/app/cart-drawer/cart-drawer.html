@@ -20,7 +20,11 @@
     } @else {
       @for (item of cart.items(); track $index) {
         <div class="drawer-item">
-          <span class="item-thumb item-thumb-placeholder" aria-hidden="true">{{ initials(item.name) }}</span>
+          @if (item.image) {
+            <img class="item-thumb" [src]="item.image" alt="">
+          } @else {
+            <span class="item-thumb item-thumb-placeholder" aria-hidden="true">{{ initials(item.name) }}</span>
+          }
           <div class="drawer-item-body">
             <p class="drawer-item-name">{{ item.name }} &ndash; {{ item.price | currency }}</p>
             @if (item.options) {
